@@ -1,0 +1,161 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--navbar-bg);
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: auto;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.homeLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo {
+  height: 60px; /* Increase this value as needed */
+  margin-right: 10px;
+}
+
+.teamName {
+  color: var(--navbar-link);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.links {
+  display: flex;
+  gap: 15px;
+}
+
+.links .navBtn {
+  background: linear-gradient(
+    90deg,
+    var(--navbar-link-active) 0%,
+    #00c6ff 100%
+  );
+  color: var(--navbar-link);
+  padding: 7px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s, transform 0.2s;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+.links .navBtn:hover {
+  background: linear-gradient(
+    90deg,
+    #0056b3 0%,
+    var(--navbar-link-active) 100%
+  );
+  color: #fff;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 30px;
+}
+
+.button {
+  background-color: #28a745;
+  color: white;
+  padding: 7px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 5px;
+  transition: background 0.3s, transform 0.2s;
+  border: none;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+.button:hover {
+  background-color: #218838;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.toggleBtn {
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 7px 16px;
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.toggleBtn:hover {
+  background: #222;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.avatar {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+/* Optional: Dark theme for body */
+body.dark-theme {
+  background: #181818;
+  color: #f1f1f1;
+}
+
+.iconToggleBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  margin-right: 5px;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--navbar-link);
+  transition: background 0.2s;
+  border-radius: 50%;
+  line-height: 1;
+}
+.iconToggleBtn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+  }
+  .nav-center {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .overlay h1 {
+    font-size: 2rem;
+  }
+  .overlay p {
+    font-size: 1rem;
+  }
+}

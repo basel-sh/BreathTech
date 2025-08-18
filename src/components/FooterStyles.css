@@ -1,0 +1,46 @@
+.footer {
+  background: var(--footer-bg, #222);
+  color: var(--footer-text, white);
+  padding: 15px 20px;
+  font-size: 13px;
+  width: 100%;
+  letter-spacing: 0.5px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.footer .topRow {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.footer .section {
+  text-align: center;
+  min-width: 200px;
+}
+
+.footer .heading {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #4dabf7;
+}
+
+.footer .text {
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+.footer .bottomRow {
+  text-align: center;
+  border-top: 1px solid #444;
+  padding-top: 6px;
+}
+
+.footer .copy {
+  font-size: 11px;
+  color: #bbb;
+  margin: 0;
+}

@@ -1,0 +1,150 @@
+.signup-container {
+  width: 400px;
+  max-width: 90%;
+  margin: 60px auto 20px;
+  padding: 40px 30px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.signup-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.signup-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signup-container input[type="text"],
+.signup-container input[type="email"],
+.signup-container input[type="password"],
+.signup-container input[type="number"] {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.signup-container input[type="text"]:hover,
+.signup-container input[type="email"]:hover,
+.signup-container input[type="password"]:hover,
+.signup-container input[type="number"]:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.signup-container input[type="text"]:focus,
+.signup-container input[type="email"]:focus,
+.signup-container input[type="password"]:focus,
+.signup-container input[type="number"]:focus {
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+.sex-selector {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.sex-selector label {
+  flex: 1;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.sex-selector label:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.sex-selector input[type="radio"] {
+  display: none;
+}
+
+.sex-selector input[type="radio"]:checked + span {
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-weight: 700;
+}
+
+.sex-selector label span {
+  pointer-events: none;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label input {
+  margin-right: 10px;
+}
+
+.checkbox-label:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.signup-container button {
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #ff4b2b;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-container button:hover {
+  background: #ff416c;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.error {
+  color: #ffdddd;
+  background-color: rgba(255, 0, 0, 0.25);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
