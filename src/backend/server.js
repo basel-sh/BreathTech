@@ -3,20 +3,22 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 8080; // Railway assigns dynamic port
 
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ MongoDB connection
-const uri =
-  "mongodb+srv://baselshm:eWgCsSbduFbNyoZ6@breathtech.qwnthgj.mongodb.net/WebsiteAccounts?retryWrites=true&w=majority&appName=BreathTech";
+// ✅ MongoDB connection (hardcoded)
+const uri = process.env.MONGODB_URI;
 
 mongoose
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(uri)
   .then(() => console.log("✅ Connected to MongoDB Atlas"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);
+  });
 
 // ✅ Schema & Model
 const userSchema = new mongoose.Schema({
@@ -31,9 +33,12 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// ✅ API Routes
+// ✅ Root route (for Railway test)
+app.get("/", (req, res) => {
+  res.send("🚀 BreathTech Backend is Running!");
+});
 
-// Register new user
+// ✅ Register new user
 app.post("/api/register", async (req, res) => {
   try {
     const { fullName, age, sex, weight, height, email, password } = req.body;
@@ -44,7 +49,6 @@ app.post("/api/register", async (req, res) => {
         .json({ error: "All required fields must be filled" });
     }
 
-    // Prevent duplicate email
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "Email already registered" });
@@ -59,8 +63,8 @@ app.post("/api/register", async (req, res) => {
       email,
       password,
     });
-
     await newUser.save();
+
     res
       .status(201)
       .json({ message: "User registered successfully!", user: newUser });
@@ -70,7 +74,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// Get all users (for testing)
+// ✅ Get all users
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find();
@@ -82,24 +86,19 @@ app.get("/api/users", async (req, res) => {
 });
 
 // ✅ Login user
-
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: "Email not found" });
-    }
+    if (!user) return res.status(400).json({ message: "Email not found" });
 
     if (user.password !== password) {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    // ✅ Send consistent format
     const { password: pw, ...userData } = user.toObject();
-    res.json({ user: userData }); // <<< FIXED (wrap in user)
+    res.json({ user: userData });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -110,20 +109,15 @@ app.put("/api/update-profile", async (req, res) => {
   try {
     const { email, fullName, age, weight, height, conditions } = req.body;
 
-    // Find and update user by email
     const user = await User.findOneAndUpdate(
-      { email }, // search by email
-      { fullName, age, weight, height, conditions }, // update fields
-      { new: true } // return the updated document
+      { email },
+      { fullName, age, weight, height, conditions },
+      { new: true }
     );
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    // remove password before sending
     const { password, ...userData } = user.toObject();
-
     res.json({ user: userData });
   } catch (err) {
     console.error("❌ Update error:", err);
@@ -131,20 +125,15 @@ app.put("/api/update-profile", async (req, res) => {
   }
 });
 
-// DELETE Account
+// ✅ Delete account
 app.delete("/api/delete-account", async (req, res) => {
   try {
     const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
+    if (!email) return res.status(400).json({ message: "Email is required" });
 
     const deletedUser = await User.findOneAndDelete({ email });
-
-    if (!deletedUser) {
+    if (!deletedUser)
       return res.status(404).json({ message: "User not found" });
-    }
 
     res.json({ message: "Account deleted successfully" });
   } catch (err) {
@@ -154,6 +143,4 @@ app.delete("/api/delete-account", async (req, res) => {
 });
 
 // ✅ Start server
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

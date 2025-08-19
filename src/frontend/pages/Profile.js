@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // <--- Replace with your Railway URL
+
 const Profile = ({ user, setUser }) => {
   const [message, setMessage] = useState("");
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
 
-  // Load user from localStorage if not in state
   useEffect(() => {
     if (!user) {
       const savedUser = JSON.parse(localStorage.getItem("user"));
@@ -16,7 +17,7 @@ const Profile = ({ user, setUser }) => {
         setUser(savedUser);
         setFormData(savedUser);
       } else {
-        navigate("/login"); // redirect if no user
+        navigate("/login");
       }
     } else {
       setFormData(user);
@@ -25,26 +26,21 @@ const Profile = ({ user, setUser }) => {
 
   if (!user) return <p>Loading profile...</p>;
 
-  // Handle input changes
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Update profile
   const handleUpdate = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/update-profile", {
+      const res = await fetch(`${BASE_URL}/api/update-profile`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok) {
+      if (res.ok) {
         setMessage("✅ Profile updated successfully!");
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
@@ -52,46 +48,41 @@ const Profile = ({ user, setUser }) => {
       } else {
         setMessage("❌ Error updating profile: " + data.message);
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      console.error("Update error:", err);
       setMessage("❌ Server error.");
     }
   };
 
-  // Delete account
   const handleDeleteAccount = async () => {
     if (!window.confirm("⚠️ Are you sure you want to delete your account?"))
       return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/delete-account", {
+      const res = await fetch(`${BASE_URL}/api/delete-account`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
 
-      if (response.ok) {
+      if (res.ok) {
         setMessage("🗑️ Account deleted successfully.");
         localStorage.removeItem("user");
         setUser(null);
-
-        setTimeout(() => {
-          navigate("/");
-        }, 0);
+        navigate("/");
       } else {
         setMessage("❌ Error deleting account.");
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      console.error("Delete error:", err);
       setMessage("❌ Server error.");
     }
   };
 
-  // Logout
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
-    setTimeout(() => navigate("/"), 0);
+    navigate("/");
   };
 
   return (
@@ -123,10 +114,7 @@ const Profile = ({ user, setUser }) => {
           <p>
             <strong>BMI:</strong>{" "}
             {user.weight && user.height
-              ? (
-                  user.weight /
-                  ((user.height / 100) * (user.height / 100))
-                ).toFixed(2) + " kg/m²"
+              ? (user.weight / (user.height / 100) ** 2).toFixed(2) + " kg/m²"
               : "Not calculated"}
           </p>
           <p>

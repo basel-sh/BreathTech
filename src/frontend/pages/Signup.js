@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 
-const SignUp = () => {
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // <--- Replace with your Railway URL
+
+const SignUp = ({ setUser }) => {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [age, setAge] = useState("");
@@ -28,7 +30,7 @@ const SignUp = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/register", {
+      const res = await fetch(`${BASE_URL}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
@@ -36,29 +38,15 @@ const SignUp = () => {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Signup failed");
-      }
+      if (!res.ok) throw new Error(data.error || "Signup failed");
 
-      console.log("Signup success:", data);
-      alert("Signup successful!");
-
-      // Save user so app knows you're logged in
       localStorage.setItem("user", JSON.stringify(data.user));
+      setUser(data.user);
 
-      // Redirect to profile
+      alert("Signup successful!");
       navigate("/profile");
-
-      // Clear the form
-      setFullName("");
-      setAge("");
-      setSex("");
-      setWeight("");
-      setHeight("");
-      setEmail("");
-      setPassword("");
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Signup error:", err);
       alert(`Signup failed: ${err.message}`);
     } finally {
       setLoading(false);

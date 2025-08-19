@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // <--- Replace with your Railway URL
 const Login = ({ setUser }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -13,26 +14,24 @@ const Login = ({ setUser }) => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch(`${BASE_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error || data.message || "Login failed");
         return;
       }
-      console.log("Login success:", data);
-      // ✅ Ensure we always store only the user part
+
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      // ✅ Update app state if needed
       setUser(data.user);
-
-      console.log("Logged in user:", data.user);
       navigate("/profile");
     } catch (err) {
       console.error("Backend error:", err);
