@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import "./LungsChat.css";
 
 function LungsChat() {
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Patient info (can make dynamic later with inputs)
+  // Example patient info
   const patientInfo = {
     Age: 25,
     BMI: 22,
@@ -35,11 +36,8 @@ function LungsChat() {
     setLoading(true);
 
     try {
-      // Build multipart/form-data
       const formData = new FormData();
-      formData.append("file", file); // 🔑 must match Multer field name
-
-      // append patient info
+      formData.append("file", file);
       Object.entries(patientInfo).forEach(([key, value]) =>
         formData.append(key, value)
       );
@@ -67,17 +65,22 @@ function LungsChat() {
   };
 
   return (
-    <div>
+    <div className="lungschat-container">
       <h2>Lungs AI Assistant</h2>
       <p>Upload your lung sound recording (WAV/MP3)</p>
 
-      <input type="file" accept="audio/*" onChange={handleFileChange} />
+      <div className="chat-input-container">
+        <input type="file" accept="audio/*" onChange={handleFileChange} />
+        <button className="send-btn" onClick={handleUpload} disabled={loading}>
+          {loading ? "Predicting..." : "Upload & Predict"}
+        </button>
+      </div>
 
-      <button onClick={handleUpload} disabled={loading}>
-        {loading ? "Predicting..." : "Upload & Predict"}
-      </button>
-
-      {prediction !== null && <p>Predicted Class: {prediction}</p>}
+      {prediction !== null && (
+        <div className="chat-messages">
+          <div className="message bot">Predicted Class: {prediction}</div>
+        </div>
+      )}
     </div>
   );
 }

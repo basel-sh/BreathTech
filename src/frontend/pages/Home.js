@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 
@@ -7,10 +7,47 @@ import SkinsDoctorImg from "../../assets/SkinDoctor.png";
 import GeneralDoctorImg from "../../assets/GeneralDoctor.png";
 import HomeAiDoctor from "../../assets/HomeVideo.mp4";
 
+const cards = [
+  {
+    title: "Lungs Diagnosis",
+    accuracy: 87,
+    to: "/lungs-chat",
+    img: LungsDoctorImg,
+  },
+  {
+    title: "Skin Analysis",
+    accuracy: 92,
+    to: "/skin-chat",
+    img: SkinsDoctorImg,
+  },
+  {
+    title: "General Health",
+    accuracy: 85,
+    to: "/general-chat",
+    img: GeneralDoctorImg,
+  },
+  {
+    title: "Lungs Diagnosis",
+    accuracy: 87,
+    to: "/lungs-chat",
+    img: LungsDoctorImg,
+  },
+  {
+    title: "Skin Analysis",
+    accuracy: 92,
+    to: "/skin-chat",
+    img: SkinsDoctorImg,
+  },
+  {
+    title: "General Health",
+    accuracy: 85,
+    to: "/general-chat",
+    img: GeneralDoctorImg,
+  },
+];
+
 const Home = () => {
   const scrollerRef = useRef(null);
-
-  // No need for isDark state, CSS handles theme via variables
 
   const scroll = (dir) => {
     if (!scrollerRef.current) return;
@@ -52,12 +89,9 @@ const Home = () => {
           </button>
 
           <div ref={scrollerRef} className="scroller">
-            {cards.map((c) => (
-              <div
-                key={c.title}
-                className="card"
-                style={{ backgroundImage: `url(${c.bg})` }}
-              >
+            {cards.map((c, i) => (
+              <div key={i} className="card">
+                <img src={c.img} alt={c.title} className="cardImg" />
                 <div className="cardOverlay" />
                 <div className="cardContent">
                   <h3 className="cardTitle">{c.title}</h3>
@@ -85,44 +119,5 @@ const Home = () => {
     </div>
   );
 };
-
-const cards = [
-  {
-    title: "Lungs Diagnosis",
-    accuracy: 87,
-    to: "/lungs-chat",
-    bg: LungsDoctorImg,
-  },
-  {
-    title: "Skin Analysis",
-    accuracy: 92,
-    to: "/skin-chat",
-    bg: SkinsDoctorImg,
-  },
-  {
-    title: "General Health",
-    accuracy: 85,
-    to: "/general-chat",
-    bg: GeneralDoctorImg,
-  },
-  {
-    title: "Lungs Diagnosis",
-    accuracy: 87,
-    to: "/lungs-chat",
-    bg: LungsDoctorImg,
-  },
-  {
-    title: "Skin Analysis",
-    accuracy: 92,
-    to: "/skin-chat",
-    bg: SkinsDoctorImg,
-  },
-  {
-    title: "General Health",
-    accuracy: 85,
-    to: "/general-chat",
-    bg: GeneralDoctorImg,
-  },
-];
 
 export default Home;

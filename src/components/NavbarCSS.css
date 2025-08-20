@@ -10,8 +10,10 @@
   width: 100%;
   z-index: 1000;
   height: auto;
+  transition: var(--transition);
 }
 
+/* Left Section */
 .left {
   display: flex;
   align-items: center;
@@ -24,7 +26,7 @@
 }
 
 .logo {
-  height: 60px; /* Increase this value as needed */
+  height: 60px;
   margin-right: 10px;
 }
 
@@ -34,6 +36,7 @@
   font-weight: bold;
 }
 
+/* Center Section */
 .links {
   display: flex;
   gap: 15px;
@@ -50,7 +53,7 @@
   border-radius: 20px;
   text-decoration: none;
   font-weight: 500;
-  transition: background 0.3s, transform 0.2s;
+  transition: var(--transition);
   border: none;
   outline: none;
   font-size: 16px;
@@ -67,6 +70,7 @@
   transform: translateY(-2px) scale(1.05);
 }
 
+/* Right Section */
 .right {
   display: flex;
   align-items: center;
@@ -75,27 +79,28 @@
 }
 
 .button {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   padding: 7px 16px;
   border-radius: 20px;
   text-decoration: none;
   font-weight: bold;
   margin-left: 5px;
-  transition: background 0.3s, transform 0.2s;
+  transition: var(--transition);
   border: none;
   font-size: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
 }
 .button:hover {
-  background-color: #218838;
+  background-color: var(--button-hover-bg);
   transform: translateY(-2px) scale(1.05);
 }
 
+/* Toggle Button */
 .toggleBtn {
-  background: #444;
-  color: #fff;
+  background: var(--toggle-bg);
+  color: var(--toggle-text);
   border: none;
   border-radius: 20px;
   padding: 7px 16px;
@@ -103,29 +108,30 @@
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: var(--transition);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 .toggleBtn:hover {
-  background: #222;
+  background: var(--toggle-hover-bg);
   transform: translateY(-2px) scale(1.05);
 }
 
+/* Avatar */
 .avatar {
   height: 35px;
   width: 35px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid var(--navbar-link);
   cursor: pointer;
   margin-left: 8px;
+  transition: var(--transition);
+}
+.avatar:hover {
+  border-color: var(--navbar-link-active);
+  transform: scale(1.1);
 }
 
-/* Optional: Dark theme for body */
-body.dark-theme {
-  background: #181818;
-  color: #f1f1f1;
-}
-
+/* Icon Button */
 .iconToggleBtn {
   background: none;
   border: none;
@@ -142,20 +148,17 @@ body.dark-theme {
   background: rgba(0, 0, 0, 0.08);
 }
 
-/* Responsive styles */
+/* Responsive */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
     text-align: center;
+    padding: 15px;
   }
-  .nav-center {
+
+  .links {
     flex-wrap: wrap;
     justify-content: center;
-  }
-  .overlay h1 {
-    font-size: 2rem;
-  }
-  .overlay p {
-    font-size: 1rem;
+    gap: 10px;
   }
 }

@@ -1,10 +1,11 @@
+/* HERO SECTION */
 .hero {
   position: relative;
   min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--text);
   text-align: center;
   overflow: hidden;
 }
@@ -33,23 +34,30 @@
 .heroContent {
   max-width: 900px;
   padding: 0 16px;
+  animation: fadeIn 1.5s ease;
 }
 
 .heroTitle {
   font-size: 48px;
   font-weight: 800;
   margin-bottom: 12px;
+  color: var(--accent, #0ea5e9);
+  transition: color 0.3s ease;
 }
 
 .heroSubtitle {
   font-size: 18px;
   line-height: 1.6;
   opacity: 0.95;
+  color: white;
+  transition: color 0.3s ease;
 }
 
+/* CARDS SECTION */
 .cardsSection {
   padding: 48px 0;
   background-color: var(--bg);
+  transition: background 0.3s ease;
 }
 
 .sectionTitle {
@@ -57,8 +65,10 @@
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 24px;
+  color: var(--heading-color, var(--text));
 }
 
+/* CAROUSEL */
 .carousel {
   position: relative;
   max-width: 1100px;
@@ -73,12 +83,14 @@
   scroll-behavior: smooth;
 }
 
+/* ARROW BUTTONS */
 .arrowBtn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   border: none;
-  background: white;
+  background: var(--button-bg, var(--navbar-link-active));
+  color: var(--button-text, #fff);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   width: 40px;
   height: 40px;
@@ -88,17 +100,39 @@
   line-height: 40px;
   text-align: center;
   z-index: 2;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+.arrowBtn:hover {
+  transform: translateY(-50%) scale(1.1);
+  background: var(--button-hover, #0ea5e9);
+  color: #fff;
 }
 
+/* CARD STYLING */
 .card {
   min-width: 280px;
   height: 360px;
   border-radius: 16px;
-  background-size: cover;
-  background-position: center;
   position: relative;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Remove z-index from img */
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* keeps image ratio */
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* z-index: -1; REMOVE THIS */
 }
 
 .cardOverlay {
@@ -110,6 +144,7 @@
     rgba(0, 0, 0, 0.25) 50%,
     rgba(0, 0, 0, 0.1) 100%
   );
+  z-index: 1; /* overlay sits above image */
 }
 
 .cardContent {
@@ -117,27 +152,77 @@
   bottom: 16px;
   left: 16px;
   right: 16px;
-  color: white;
+  color: var(--text);
+  z-index: 2; /* content above overlay */
 }
 
 .cardTitle {
   margin: 0;
   font-size: 22px;
   font-weight: 700;
+  color: var(--accent, #0ea5e9);
 }
 
 .cardMeta {
-  margin: 6px 0 12px 0;
+  margin: 6px 0 12px;
   font-size: 13px;
   opacity: 0.9;
+  color: white;
 }
 
 .cardBtn {
   display: inline-block;
   padding: 10px 14px;
-  background: #0ea5e9;
-  color: white;
+  background: var(--button-bg, #0ea5e9);
+  color: var(--button-text, #fff);
   text-decoration: none;
   border-radius: 10px;
   font-weight: 700;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.cardBtn:hover {
+  background: var(--button-hover, #0284c7);
+  transform: scale(1.05);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .scroller {
+    padding: 8px 24px;
+  }
+  .card {
+    min-width: 240px;
+    height: 320px;
+  }
+  .heroTitle {
+    font-size: 32px;
+  }
+  .heroSubtitle {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    min-width: 200px;
+    height: 280px;
+  }
+  .heroTitle {
+    font-size: 26px;
+  }
+  .heroSubtitle {
+    font-size: 14px;
+  }
 }

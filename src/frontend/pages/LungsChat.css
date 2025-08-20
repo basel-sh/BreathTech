@@ -1,0 +1,90 @@
+/* LungsChat.css */
+
+/* Container */
+.lungschat-container {
+  max-width: 900px;
+  margin: 80px auto 40px; /* leave space for navbar */
+  padding: 20px;
+  background-color: var(--bg);
+  color: var(--text);
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Chat messages */
+.chat-messages {
+  max-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Individual message */
+.message {
+  padding: 12px 16px;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
+  transition: background 0.3s, color 0.3s;
+}
+
+.message.user {
+  background-color: var(--button-bg, #0ea5e9);
+  color: var(--button-text, #fff);
+  align-self: flex-end;
+}
+
+.message.bot {
+  background-color: var(--card-bg, #f0f0f0);
+  color: var(--text);
+  align-self: flex-start;
+}
+
+/* Input section */
+.chat-input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input-container input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-input-container input:focus {
+  outline: none;
+  border-color: var(--button-bg, #0ea5e9);
+  box-shadow: 0 0 5px rgba(14, 165, 233, 0.5);
+}
+
+/* Send button */
+.send-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  background-color: var(--button-bg, #0ea5e9);
+  color: var(--button-text, #fff);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.send-btn:hover {
+  background-color: var(--button-hover, #0284c7);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lungschat-container {
+    margin: 100px 16px 20px;
+  }
+}

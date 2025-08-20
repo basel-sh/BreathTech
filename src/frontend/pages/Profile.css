@@ -1,26 +1,30 @@
+/* Profile.css */
+
 .profile-container {
   max-width: 500px;
-  margin: 60px auto 20px;
+  margin: 80px auto 20px;
   padding: 25px 20px;
-  background-color: #ffffff;
+  background-color: var(--bg);
+  color: var(--text);
   border-radius: 15px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s, color 0.3s;
 }
 
 .profile-container h2 {
   text-align: center;
   margin-bottom: 25px;
-  color: #333333;
+  color: var(--heading-color, var(--text));
 }
 
 .profile-container p {
   font-size: 16px;
   margin: 8px 0;
-  color: #444444;
+  color: var(--text-secondary, var(--text));
 }
 
-/* ✅ Buttons */
+/* Buttons */
 .logout-btn,
 .delete-btn,
 .edit-btn,
@@ -37,10 +41,10 @@
   transition: all 0.3s ease;
 }
 
-/* Logout button */
+/* Button Themes */
 .logout-btn {
-  background-color: #4caf50;
-  color: white;
+  background-color: var(--accent, #4caf50);
+  color: var(--button-text, #fff);
 }
 
 .logout-btn:hover {
@@ -49,10 +53,9 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Delete button */
 .delete-btn {
-  background-color: #ff4b2b;
-  color: white;
+  background-color: var(--delete-btn, #ff4b2b);
+  color: var(--button-text, #fff);
 }
 
 .delete-btn:hover {
@@ -61,10 +64,9 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Edit button */
 .edit-btn {
-  background-color: #2196f3;
-  color: white;
+  background-color: var(--edit-btn, #2196f3);
+  color: var(--button-text, #fff);
 }
 
 .edit-btn:hover {
@@ -73,10 +75,9 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Save button */
 .save-btn {
-  background-color: #673ab7;
-  color: white;
+  background-color: var(--save-btn, #673ab7);
+  color: var(--button-text, #fff);
 }
 
 .save-btn:hover {
@@ -85,10 +86,9 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Cancel button */
 .cancel-btn {
-  background-color: #9e9e9e;
-  color: white;
+  background-color: var(--cancel-btn, #9e9e9e);
+  color: var(--button-text, #fff);
 }
 
 .cancel-btn:hover {
@@ -97,34 +97,37 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Messages */
+/* Messages */
 .success-msg {
-  color: green;
+  color: var(--success, green);
   text-align: center;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .error-msg {
-  color: red;
+  color: var(--error, red);
   text-align: center;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-/* ✅ Form */
+/* Form Inputs */
 .profile-form input {
   width: 100%;
   padding: 10px;
   margin: 8px 0;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border, #ccc);
   font-size: 15px;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--input-bg, #fff);
+  color: var(--text);
+  transition: border 0.2s ease, box-shadow 0.2s ease, background 0.3s,
+    color 0.3s;
 }
 
 .profile-form input:focus {
   outline: none;
-  border-color: #2196f3;
-  box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+  border-color: var(--button-bg, #0ea5e9);
+  box-shadow: 0 0 5px rgba(14, 165, 233, 0.5);
 }

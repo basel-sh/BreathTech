@@ -1,36 +1,39 @@
-/* Add this at the top of your CSS */
+/* === Login.css === */
 * {
   box-sizing: border-box;
 }
 
-/* Then keep your previous styles */
 .login-container-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  background: var(--background);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s ease;
 }
 
 .login-container {
-  background: #fff;
+  background: var(--card-bg);
   padding: 40px 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
 .login-container h2 {
   margin-bottom: 25px;
   font-size: 28px;
-  color: #333;
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .login-container form {
@@ -41,31 +44,69 @@
 }
 
 .login-container input {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
   font-size: 16px;
   width: 100%;
-  box-sizing: border-box; /* make padding included in width */
+  background: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.login-container input:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.login-container input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
 }
 
 .login-container button {
   padding: 12px 15px;
   border: none;
-  border-radius: 8px;
-  background-color: #007bff;
-  color: #fff;
+  border-radius: 12px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  margin-top: 5px;
 }
 
 .login-container button:hover {
-  background-color: #0056b3;
+  background: var(--button-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
 }
 
 .error {
-  color: #ff4d4f;
+  color: var(--error-text);
+  background: var(--error-bg);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
   font-size: 14px;
-  text-align: center;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+/* === Responsive Design === */
+@media (max-width: 600px) {
+  .login-container {
+    padding: 25px 20px;
+  }
+
+  .login-container h2 {
+    font-size: 22px;
+  }
+
+  .login-container button {
+    font-size: 16px;
+    padding: 10px;
+  }
 }

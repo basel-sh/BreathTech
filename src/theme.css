@@ -1,0 +1,32 @@
+:root {
+  /* 🎨 Brand Colors */
+  --primary: #6a11cb; /* Main gradient start */
+  --secondary: #2575fc; /* Main gradient end */
+  --accent: #00c6ff; /* Highlight / hover glow */
+
+  /* 🖤 Backgrounds */
+  --bg: #121212; /* Page background */
+  --bg-alt: #b51717; /* Cards / input fields */
+  --overlay: rgba(255, 255, 255, 0.08);
+  --overlay-hover: rgba(255, 255, 255, 0.18);
+  --overlay-strong: rgba(255, 255, 255, 0.28);
+
+  /* ✍️ Text */
+  --text: #f5f5f5;
+  --text-light: #ffffff;
+  --text-muted: #bbbbbb;
+
+  /* 🚨 Alerts */
+  --danger: #ff4b2b;
+  --danger-hover: #ff416c;
+  --error-bg: rgba(255, 0, 0, 0.25);
+  --error-text: #ffdddd;
+
+  /* 🧩 Shadows */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.35);
+
+  /* 🖋 Fonts */
+  --font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

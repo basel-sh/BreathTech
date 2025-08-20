@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
-const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // <--- Replace with your Railway URL
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 const Profile = ({ user, setUser }) => {
   const [message, setMessage] = useState("");
@@ -88,6 +88,7 @@ const Profile = ({ user, setUser }) => {
   return (
     <div className="profile-container">
       <h2>👤 Profile</h2>
+
       {message && (
         <p className={message.startsWith("✅") ? "success-msg" : "error-msg"}>
           {message}
@@ -121,7 +122,7 @@ const Profile = ({ user, setUser }) => {
             <strong>Conditions:</strong> {user.conditions || "None"}
           </p>
 
-          <button className="logout-btn" onClick={() => setEditing(true)}>
+          <button className="edit-btn" onClick={() => setEditing(true)}>
             ✏️ Edit Profile
           </button>
           <button className="delete-btn" onClick={handleDeleteAccount}>
@@ -169,10 +170,10 @@ const Profile = ({ user, setUser }) => {
             placeholder="Medical Conditions"
           />
 
-          <button className="logout-btn" onClick={handleUpdate}>
+          <button className="save-btn" onClick={handleUpdate}>
             💾 Save Changes
           </button>
-          <button className="delete-btn" onClick={() => setEditing(false)}>
+          <button className="cancel-btn" onClick={() => setEditing(false)}>
             ❌ Cancel
           </button>
         </div>

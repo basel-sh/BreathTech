@@ -1,47 +1,66 @@
+@import "./theme.css";
+
+/* Global Reset */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: var(--bg);
   color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 html,
 body {
   overflow-x: hidden;
 }
+
 /* Light/Dark theme variables */
 :root {
   --bg: #f6f7fb;
   --text: #181f2f;
   --navbar-bg: #205094;
-  --navbar-link: #fff;
+  --navbar-link: #ffffff;
   --navbar-link-active: #00c6ff;
   --footer-bg: #205094;
-  --footer-text: #fff;
+  --footer-text: #ffffff;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --button-bg: #007bff;
+  --button-hover-bg: #0056b3;
+  --button-text: #ffffff;
+  --transition: all 0.3s ease-in-out;
 }
 
 [data-theme="dark"] {
-  --bg: #23272f; /* Modern dark blue-gray */
-  --text: #e0e6f7; /* Soft light blue-gray */
-  --navbar-bg: #232c3d; /* Slightly lighter than bg, modern */
+  --bg: #23272f;
+  --text: #e0e6f7;
+  --navbar-bg: #232c3d;
   --navbar-link: #e0e6f7;
   --navbar-link-active: #0ea5e9;
   --footer-bg: #232c3d;
   --footer-text: #8fa2c9;
+  --card-bg: #1e1e1e;
+  --card-shadow: rgba(255, 255, 255, 0.1);
+  --button-bg: #0ea5e9;
+  --button-hover-bg: #0284c7;
+  --button-text: #ffffff;
 }
 
-.na.navbar {
+/* Navbar */
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #333;
+  background: var(--navbar-bg);
   padding: 10px 20px;
+  transition: var(--transition);
 }
 
 .nav-left {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: white;
+  color: var(--navbar-link);
 }
 
 .logo {
@@ -51,6 +70,7 @@ body {
 .team-name {
   font-weight: bold;
   font-size: 18px;
+  color: var(--navbar-link);
 }
 
 .nav-center {
@@ -59,16 +79,65 @@ body {
 }
 
 .nav-center a {
-  color: white;
+  color: var(--navbar-link);
   text-decoration: none;
   font-size: 16px;
+  transition: var(--transition);
 }
 
+.nav-center a:hover {
+  color: var(--navbar-link-active);
+  transform: scale(1.05);
+}
+
+/* Avatar */
 .nav-right .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-right .avatar:hover {
+  transform: scale(1.1);
+}
+
+/* Buttons */
+.button,
+.toggleBtn,
+.iconToggleBtn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.button:hover,
+.toggleBtn:hover,
+.iconToggleBtn:hover {
+  background: var(--button-hover-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px var(--card-shadow);
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px var(--card-shadow);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--card-shadow);
 }
 
 /* Responsive styles */
@@ -81,10 +150,20 @@ body {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .overlay h1 {
-    font-size: 2rem;
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 10px;
   }
-  .overlay p {
-    font-size: 1rem;
+  .team-name {
+    font-size: 16px;
+  }
+  .nav-center a {
+    font-size: 14px;
+  }
+  .button {
+    padding: 6px 12px;
+    font-size: 13px;
   }
 }
