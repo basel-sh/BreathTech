@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/Logo3.png";
 import avatar from "../assets/avatar.png";
 import "./NavbarCSS.css";
-import WebsiteMainLogo from "../assets/WebsiteMainLogo.png";
+import WebsiteMainLogo from "../assets/HQWebsiteLogo.png";
 
 const Navbar = ({ user }) => {
   // Set dark mode as default
@@ -47,15 +47,29 @@ const Navbar = ({ user }) => {
     <>
       <nav className="navbar">
         {/* Logo and Title (Always visible) */}
-        <Link to="/" className="homeLink">
-          <img
-            src={WebsiteMainLogo}
-            alt="BreathTech Logo"
-            className="logo"
-            style={{ height: isMobile ? "70px" : "80px" }} // Responsive logo size
-          />
-          <span className="teamName">BreathTech</span>
-        </Link>
+        <span className="logoContainer">
+          <Link to="/" className="homeLink">
+            <img
+              src={WebsiteMainLogo}
+              alt="BreathTech Logo"
+              className="logo"
+              style={{ height: isMobile ? "70px" : "80px" }} // Responsive logo size
+            />
+            <span className="teamName">BreathTech</span>
+          </Link>
+        </span>
+        {/* Mobile Hamburger (Only visible on mobile) */}
+        {isMobile && (
+          <div
+            className={`hamburger ${menuOpen ? "active" : ""}`}
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        )}
 
         {/* Desktop Navigation (Hidden on mobile) */}
         {!isMobile && (
@@ -105,19 +119,6 @@ const Navbar = ({ user }) => {
               )}
             </div>
           </>
-        )}
-
-        {/* Mobile Hamburger (Only visible on mobile) */}
-        {isMobile && (
-          <button
-            className={`hamburger ${menuOpen ? "active" : ""}`}
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         )}
       </nav>
 

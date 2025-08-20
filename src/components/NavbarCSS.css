@@ -193,10 +193,27 @@
   transition: right 0.3s ease;
   z-index: 1100;
   text-align: center;
+
+  /* ✅ makes sidebar scrollable */
+  overflow-y: auto;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #aaa transparent; /* Firefox */
+}
+/* Optional: custom scrollbar for Chrome/Edge */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
 }
 
+.sidebar::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
 .sidebar h1 {
-  font-size: 22px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -207,6 +224,7 @@
 
 .sidebar .navBtn {
   font-size: 18px;
+  font-weight: 500;
   padding: 12px 15px;
   border-radius: 10px;
   text-decoration: none;
@@ -214,6 +232,7 @@
   transition: 0.3s;
   border: 2px solid transparent;
   width: 100%;
+  border: white solid 2px;
 }
 
 .mobile-SIGNLOGPROFILE {
