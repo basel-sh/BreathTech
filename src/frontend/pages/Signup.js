@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 
-const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // <--- Replace with your Railway URL
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 const SignUp = ({ setUser }) => {
   const navigate = useNavigate();
@@ -71,12 +71,29 @@ const SignUp = ({ setUser }) => {
           onChange={(e) => setAge(e.target.value)}
           required
         />
-        <select value={sex} onChange={(e) => setSex(e.target.value)} required>
-          <option value="">Select Sex</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
+
+        {/* Gender Selector */}
+        <div className="sex-selector">
+          <label>
+            <input
+              type="radio"
+              value="Male"
+              checked={sex === "Male"}
+              onChange={(e) => setSex(e.target.value)}
+            />
+            <span>Male</span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="Female"
+              checked={sex === "Female"}
+              onChange={(e) => setSex(e.target.value)}
+            />
+            <span>Female</span>
+          </label>
+        </div>
+
         <input
           type="number"
           step="0.1"

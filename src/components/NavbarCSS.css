@@ -1,24 +1,24 @@
+/* --------------------
+   NAVBAR BASE
+-------------------- */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--navbar-bg);
-  padding: 10px 20px;
+  background: var(--navbar-bg, rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(10px);
+  padding: 10px 30px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  height: auto;
-  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Left Section */
-.left {
-  display: flex;
-  align-items: center;
-}
-
+/* --------------------
+   LEFT SECTION
+-------------------- */
 .homeLink {
   display: flex;
   align-items: center;
@@ -26,20 +26,29 @@
 }
 
 .logo {
-  height: 60px;
+  height: 80px;
   margin-right: 10px;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .teamName {
-  color: var(--navbar-link);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
+  color: var(--navbar-link, #222);
+  white-space: nowrap;
 }
 
-/* Center Section */
+/* --------------------
+   CENTER LINKS
+-------------------- */
 .links {
   display: flex;
-  gap: 15px;
+  justify-content: center;
+  gap: 20px;
 }
 
 .links .navBtn {
@@ -48,18 +57,19 @@
     var(--navbar-link-active) 0%,
     #00c6ff 100%
   );
-  color: var(--navbar-link);
+  color: var(--navbar-link, #222);
   padding: 7px 18px;
   border-radius: 20px;
   text-decoration: none;
   font-weight: 500;
-  transition: var(--transition);
+  font-size: 16px;
   border: none;
   outline: none;
-  font-size: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
 .links .navBtn:hover {
   background: linear-gradient(
     90deg,
@@ -70,95 +80,236 @@
   transform: translateY(-2px) scale(1.05);
 }
 
-/* Right Section */
+/* --------------------
+   RIGHT SECTION
+-------------------- */
 .right {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-right: 30px;
+}
+
+.iconToggleBtn,
+.toggleBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.iconToggleBtn:hover,
+.toggleBtn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .button {
-  background-color: var(--button-bg);
-  color: var(--button-text);
+  background-color: var(--button-bg, #222);
+  color: var(--button-text, #fff);
   padding: 7px 16px;
   border-radius: 20px;
   text-decoration: none;
   font-weight: bold;
-  margin-left: 5px;
-  transition: var(--transition);
   border: none;
   font-size: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
 .button:hover {
-  background-color: var(--button-hover-bg);
+  background-color: var(--button-hover-bg, #444);
   transform: translateY(-2px) scale(1.05);
 }
 
-/* Toggle Button */
-.toggleBtn {
-  background: var(--toggle-bg);
-  color: var(--toggle-text);
-  border: none;
-  border-radius: 20px;
-  padding: 7px 16px;
-  margin-right: 5px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-.toggleBtn:hover {
-  background: var(--toggle-hover-bg);
-  transform: translateY(-2px) scale(1.05);
-}
-
-/* Avatar */
 .avatar {
   height: 35px;
   width: 35px;
   border-radius: 50%;
-  border: 2px solid var(--navbar-link);
+  border: 2px solid var(--navbar-link, #222);
   cursor: pointer;
-  margin-left: 8px;
-  transition: var(--transition);
+  transition: 0.3s;
 }
+
 .avatar:hover {
-  border-color: var(--navbar-link-active);
+  border-color: var(--navbar-link-active, #00c6ff);
   transform: scale(1.1);
 }
 
-/* Icon Button */
-.iconToggleBtn {
+/* --------------------
+   HAMBURGER (Mobile)
+-------------------- */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
   background: none;
   border: none;
-  font-size: 24px;
-  margin-right: 5px;
   cursor: pointer;
-  padding: 4px 8px;
-  color: var(--navbar-link);
-  transition: background 0.2s;
-  border-radius: 50%;
-  line-height: 1;
-}
-.iconToggleBtn:hover {
-  background: rgba(0, 0, 0, 0.08);
+  z-index: 1200;
+  padding: 0;
 }
 
-/* Responsive */
+.hamburger span {
+  height: 3px;
+  width: 100%;
+  background: var(--navbar-link, #222);
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translateY(7px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-7px);
+}
+
+/* --------------------
+   SIDEBAR (Mobile Menu)
+-------------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 260px;
+  height: 100%;
+  background: var(--navbar-bg, #fff);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 20px;
+  gap: 20px;
+  transition: right 0.3s ease;
+  z-index: 1100;
+  text-align: center;
+}
+
+.sidebar h1 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.sidebar.active {
+  right: 0;
+}
+
+.sidebar .navBtn {
+  font-size: 18px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--navbar-link, #222);
+  transition: 0.3s;
+  border: 2px solid transparent;
+  width: 100%;
+}
+
+.mobile-SIGNLOGPROFILE {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar .navBtn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  transform: translateX(5px);
+}
+
+/* Avatar inside sidebar */
+.sidebar .avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--navbar-link, #222);
+  margin-top: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar .avatar:hover {
+  border-color: var(--navbar-link-active, #00c6ff);
+  transform: scale(1.1);
+}
+
+.mobile-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.mobile-actions .button {
+  text-align: center;
+  margin: 5px 0;
+}
+
+/* --------------------
+   OVERLAY
+-------------------- */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1050;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --------------------
+   RESPONSIVE
+-------------------- */
+@media (max-width: 1024px) {
+  .links {
+    gap: 12px;
+  }
+  .teamName {
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 768px) {
+  .links,
+  .right {
+    display: none;
+  }
   .navbar {
-    flex-direction: column;
-    text-align: center;
-    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  .hamburger {
+    display: flex;
   }
 
-  .links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
+  .teamName {
+    font-size: 18px;
+  }
+
+  .logo {
+    height: 70px;
   }
 }
