@@ -45,31 +45,37 @@ const Navbar = ({ user }) => {
 
   return (
     <>
-      <nav className="navbar">
-        {/* Logo and Title (Always visible) */}
-        <span className="logoContainer">
-          <Link to="/" className="homeLink">
-            <img
-              src={WebsiteMainLogo}
-              alt="BreathTech Logo"
-              className="logo"
-              style={{ height: isMobile ? "70px" : "80px" }} // Responsive logo size
-            />
-            <span className="teamName">BreathTech</span>
-          </Link>
-        </span>
-        {/* Mobile Hamburger (Only visible on mobile) */}
-        {isMobile && (
-          <div
-            className={`hamburger ${menuOpen ? "active" : ""}`}
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="navbar">
+        <div className="ForFixingTheMenu">
+          <div>
+            {/* Logo and Title (Always visible) */}
+            <span className="logoContainer">
+              <Link to="/" className="homeLink">
+                <img
+                  src={WebsiteMainLogo}
+                  alt="BreathTech Logo"
+                  className="logo"
+                  style={{ height: isMobile ? "70px" : "80px" }} // Responsive logo size
+                />
+                <span className="teamName">BreathTech</span>
+              </Link>
+            </span>
           </div>
-        )}
+          {/* Mobile Hamburger (Only visible on mobile) */}
+          <div className="hamburgerContainer">
+            {isMobile && (
+              <div
+                className={`hamburger ${menuOpen ? "active" : ""}`}
+                onClick={toggleMenu}
+                aria-label="Toggle menu"
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Desktop Navigation (Hidden on mobile) */}
         {!isMobile && (
@@ -120,7 +126,7 @@ const Navbar = ({ user }) => {
             </div>
           </>
         )}
-      </nav>
+      </div>
 
       {/* Mobile Sidebar */}
       {isMobile && (

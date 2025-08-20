@@ -3,7 +3,6 @@
 -------------------- */
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background: var(--navbar-bg, rgba(255, 255, 255, 0.9));
   backdrop-filter: blur(10px);
@@ -79,7 +78,8 @@
   color: #fff;
   transform: translateY(-2px) scale(1.05);
 }
-
+.hamburgerContainer {
+}
 /* --------------------
    RIGHT SECTION
 -------------------- */
@@ -153,7 +153,12 @@
   z-index: 1200;
   padding: 0;
 }
-
+.hamburgerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
 .hamburger span {
   height: 3px;
   width: 100%;
@@ -330,5 +335,11 @@
 
   .logo {
     height: 70px;
+  }
+  .ForFixingTheMenu {
+    all: initial; /* Resets all properties to their initial values */
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 }
