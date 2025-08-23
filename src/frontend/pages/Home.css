@@ -53,6 +53,77 @@
   transition: color 0.3s ease;
 }
 
+/* ABOUT OUR IDEA SECTION */
+.aboutIdea {
+  padding: 64px 16px;
+  background-color: var(--bg); /* use theme variable instead */
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.aboutIdea h2 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  color: var(--accent, #0ea5e9);
+}
+
+.aboutCardsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.aboutCard {
+  background: var(--bg, #fff);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 32px 24px;
+  width: 320px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.aboutCard:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.aboutCardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--accent, #0ea5e9);
+}
+
+.aboutCardDesc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text, #333);
+}
+
+/* Signup Button in About Section */
+.signupBtn {
+  margin-top: 32px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  background: var(--button-bg, #0ea5e9);
+  color: var(--button-text, #fff);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.signupBtn:hover {
+  background: var(--button-hover, #0284c7);
+  transform: scale(1.05);
+}
+
 /* CARDS SECTION */
 .cardsSection {
   padding: 48px 0;
@@ -102,6 +173,7 @@
   z-index: 2;
   transition: transform 0.2s ease, background 0.3s ease;
 }
+
 .arrowBtn:hover {
   transform: translateY(-50%) scale(1.1);
   background: var(--button-hover, #0ea5e9);
@@ -124,15 +196,13 @@
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
 }
 
-/* Remove z-index from img */
 .cardImg {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* keeps image ratio */
+  object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
-  /* z-index: -1; REMOVE THIS */
 }
 
 .cardOverlay {
@@ -144,7 +214,7 @@
     rgba(0, 0, 0, 0.25) 50%,
     rgba(0, 0, 0, 0.1) 100%
   );
-  z-index: 1; /* overlay sits above image */
+  z-index: 1;
 }
 
 .cardContent {
@@ -153,7 +223,7 @@
   left: 16px;
   right: 16px;
   color: var(--text);
-  z-index: 2; /* content above overlay */
+  z-index: 2;
 }
 
 .cardTitle {
@@ -180,9 +250,39 @@
   font-weight: 700;
   transition: background 0.3s ease, transform 0.2s ease;
 }
+
 .cardBtn:hover {
   background: var(--button-hover, #0284c7);
   transform: scale(1.05);
+}
+
+.disabledCard {
+  position: relative;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.fancySeparator {
+  border: none;
+  height: 4px;
+  width: 80%;
+  margin: 40px auto;
+  border-radius: 2px;
+  background: linear-gradient(270deg, #0ea5e9, #0284c7, #0ea5e9);
+  background-size: 600% 100%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* ANIMATIONS */
@@ -212,6 +312,17 @@
   .heroSubtitle {
     font-size: 15px;
   }
+  .aboutCardsContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  .aboutCard {
+    width: 90%;
+    padding: 28px 20px;
+  }
+  .signupBtn {
+    width: 90%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -224,5 +335,18 @@
   }
   .heroSubtitle {
     font-size: 14px;
+  }
+  .aboutCard {
+    padding: 20px 16px;
+  }
+  .aboutCardTitle {
+    font-size: 18px;
+  }
+  .aboutCardDesc {
+    font-size: 13px;
+  }
+  .signupBtn {
+    font-size: 14px;
+    padding: 10px 16px;
   }
 }

@@ -1,35 +1,27 @@
+// Navbar.js
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/Logo3.png";
-import avatar from "../assets/avatar.png";
+import WebsiteMainLogo from "../assets/HQWebsiteLogo2.png";
+import defaultAvatar from "../assets/avatar.png"; // default avatar
 import "./NavbarCSS.css";
-import WebsiteMainLogo from "../assets/HQWebsiteLogo.png";
+
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 const Navbar = ({ user }) => {
-  // Set dark mode as default
-  const [theme, setTheme] = useState(() => {
-    // Check for saved theme preference or default to dark
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme ? savedTheme : "dark"; // Default to dark mode
-  });
-
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "dark"
+  );
   const [lang, setLang] = useState("EN");
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Detect window size
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    // Set initial state and add event listener
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
     window.addEventListener("resize", handleResize);
-
-    // Apply the theme on initial load
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme); // Save theme preference
-
+    localStorage.setItem("theme", theme);
     return () => window.removeEventListener("resize", handleResize);
   }, [theme]);
 
@@ -37,31 +29,56 @@ const Navbar = ({ user }) => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme); // Save the new theme preference
+    localStorage.setItem("theme", newTheme);
   };
 
   const toggleLang = () => setLang(lang === "EN" ? "AR" : "EN");
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  // Disable links based on user role
+  const isLinkDisabled = (linkName) => {
+    if (linkName === "Home") return false;
+    if (!user) return true;
+    if (user.role === "patient" && linkName !== "General Chat") return true;
+    return false;
+  };
+
+  const renderLink = (to, name) => (
+    <Link
+      to={isLinkDisabled(name) ? "#" : to}
+      className={`navBtn ${isLinkDisabled(name) ? "disabled" : ""}`}
+      onClick={(e) => {
+        if (isLinkDisabled(name)) e.preventDefault();
+        if (isMobile) setMenuOpen(false);
+      }}
+    >
+      {name}
+    </Link>
+  );
+
+  // Reactive avatar source
+  const avatarSrc =
+    user && user.avatar && user.avatar !== "/default-avatar.png"
+      ? `${BASE_URL}${user.avatar}`
+      : defaultAvatar;
 
   return (
     <>
       <div className="navbar">
         <div className="ForFixingTheMenu">
           <div>
-            {/* Logo and Title (Always visible) */}
             <span className="logoContainer">
               <Link to="/" className="homeLink">
                 <img
                   src={WebsiteMainLogo}
                   alt="BreathTech Logo"
                   className="logo"
-                  style={{ height: isMobile ? "70px" : "80px" }} // Responsive logo size
+                  style={{ height: isMobile ? "70px" : "80px" }}
                 />
                 <span className="teamName">BreathTech</span>
               </Link>
             </span>
           </div>
-          {/* Mobile Hamburger (Only visible on mobile) */}
           <div className="hamburgerContainer">
             {isMobile && (
               <div
@@ -77,22 +94,13 @@ const Navbar = ({ user }) => {
           </div>
         </div>
 
-        {/* Desktop Navigation (Hidden on mobile) */}
         {!isMobile && (
           <>
             <div className="links">
-              <Link to="/" className="navBtn">
-                Home
-              </Link>
-              <Link to="/lungs-chat" className="navBtn">
-                Lungs Chat
-              </Link>
-              <Link to="/skin-chat" className="navBtn">
-                Skin Chat
-              </Link>
-              <Link to="/general-chat" className="navBtn">
-                General Chat
-              </Link>
+              {renderLink("/", "Home")}
+              {renderLink("/lungs-chat", "Lungs Chat")}
+              {renderLink("/skin-chat", "Skin Chat")}
+              {renderLink("/general-chat", "General Chat")}
             </div>
 
             <div className="right">
@@ -120,7 +128,12 @@ const Navbar = ({ user }) => {
                 </>
               ) : (
                 <Link to="/profile">
-                  <img src={avatar} alt="Profile Avatar" className="avatar" />
+                  <img
+                    src={avatarSrc}
+                    alt="Profile Avatar"
+                    className="avatar"
+                    key={avatarSrc} // forces re-render on change
+                  />
                 </Link>
               )}
             </div>
@@ -128,23 +141,15 @@ const Navbar = ({ user }) => {
         )}
       </div>
 
-      {/* Mobile Sidebar */}
       {isMobile && (
         <>
           <div className={`sidebar ${menuOpen ? "active" : ""}`}>
             <h1>Menu Bar</h1>
-            <Link to="/" className="navBtn" onClick={toggleMenu}>
-              Home
-            </Link>
-            <Link to="/lungs-chat" className="navBtn" onClick={toggleMenu}>
-              Lungs Chat
-            </Link>
-            <Link to="/skin-chat" className="navBtn" onClick={toggleMenu}>
-              Skin Chat
-            </Link>
-            <Link to="/general-chat" className="navBtn" onClick={toggleMenu}>
-              General Chat
-            </Link>
+            {renderLink("/", "Home")}
+            {renderLink("/lungs-chat", "Lungs Chat")}
+            {renderLink("/skin-chat", "Skin Chat")}
+            {renderLink("/general-chat", "General Chat")}
+
             <div className="mobile-actions">
               <button className="button" onClick={toggleTheme}>
                 {theme === "light" ? "Dark Mode" : "Light Mode"}
@@ -152,6 +157,7 @@ const Navbar = ({ user }) => {
               <button className="button" onClick={toggleLang}>
                 Switch to {lang === "EN" ? "Arabic" : "English"}
               </button>
+
               <div className="mobile-SIGNLOGPROFILE">
                 {!user ? (
                   <>
@@ -164,7 +170,12 @@ const Navbar = ({ user }) => {
                   </>
                 ) : (
                   <Link to="/profile" onClick={toggleMenu}>
-                    <img src={avatar} alt="Profile" className="avatar" />
+                    <img
+                      src={avatarSrc}
+                      alt="Profile"
+                      className="avatar"
+                      key={avatarSrc} // forces re-render
+                    />
                   </Link>
                 )}
               </div>

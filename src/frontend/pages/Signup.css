@@ -107,6 +107,46 @@
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
 }
+/* Avatar Upload Input */
+.signup-container .avatar-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.signup-container .avatar-upload:hover {
+  border-color: var(--accent);
+  background: var(--hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.signup-container .avatar-upload input[type="file"] {
+  display: none;
+}
+
+.signup-container .avatar-preview {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.signup-container .avatar-preview img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+}
 
 /* === Responsive === */
 @media (max-width: 600px) {
@@ -114,7 +154,7 @@
     padding: 25px 20px;
     margin: 40px auto 15px;
   }
-  
+
   .signup-container h2 {
     font-size: 22px;
   }

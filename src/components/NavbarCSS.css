@@ -78,9 +78,7 @@
   color: #fff;
   transform: translateY(-2px) scale(1.05);
 }
-.hamburgerContainer {
-  margin-right: 12px;
-}
+
 /* --------------------
    RIGHT SECTION
 -------------------- */
@@ -125,18 +123,22 @@
   transform: translateY(-2px) scale(1.05);
 }
 
+/* --------------------
+   AVATAR
+-------------------- */
 .avatar {
-  height: 35px;
-  width: 35px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
   border: 2px solid var(--navbar-link, #222);
   cursor: pointer;
   transition: 0.3s;
+  object-fit: cover;
 }
 
 .avatar:hover {
   border-color: var(--navbar-link-active, #00c6ff);
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 /* --------------------
@@ -154,12 +156,14 @@
   z-index: 1200;
   padding: 0;
 }
+
 .hamburgerContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
+
 .hamburger span {
   height: 3px;
   width: 100%;
@@ -199,13 +203,9 @@
   transition: right 0.3s ease;
   z-index: 1100;
   text-align: center;
-
-  /* ✅ makes sidebar scrollable */
-  overflow-y: auto;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #aaa transparent; /* Firefox */
+  overflow-y: auto; /* makes sidebar scrollable */
 }
-/* Optional: custom scrollbar for Chrome/Edge */
+
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }
@@ -218,6 +218,7 @@
 .sidebar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .sidebar h1 {
   font-size: 30px;
   font-weight: bold;
@@ -238,14 +239,6 @@
   transition: 0.3s;
   border: 2px solid transparent;
   width: 100%;
-  border: white solid 2px;
-}
-
-.mobile-SIGNLOGPROFILE {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .sidebar .navBtn:hover {
@@ -253,7 +246,9 @@
   transform: translateX(5px);
 }
 
-/* Avatar inside sidebar */
+/* --------------------
+   MOBILE AVATAR
+-------------------- */
 .sidebar .avatar {
   height: 50px;
   width: 50px;
@@ -262,13 +257,17 @@
   margin-top: 15px;
   cursor: pointer;
   transition: 0.3s;
+  object-fit: cover;
 }
 
 .sidebar .avatar:hover {
   border-color: var(--navbar-link-active, #00c6ff);
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
+/* --------------------
+   MOBILE ACTIONS
+-------------------- */
 .mobile-actions {
   display: flex;
   flex-direction: column;
@@ -329,18 +328,33 @@
   .hamburger {
     display: flex;
   }
-
   .teamName {
     font-size: 18px;
   }
-
   .logo {
     height: 70px;
   }
   .ForFixingTheMenu {
-    all: initial; /* Resets all properties to their initial values */
+    all: initial;
     display: flex;
     justify-content: space-between;
     width: 100%;
   }
+}
+
+/* --------------------
+   DISABLED LINKS
+-------------------- */
+.navBtn.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(200, 200, 200, 0.3);
+  color: #888;
+}
+
+.navBtn.disabled:hover {
+  transform: none;
+  background: rgba(200, 200, 200, 0.3);
+  color: #888;
 }

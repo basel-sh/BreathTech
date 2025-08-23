@@ -13,31 +13,34 @@ const SignUp = ({ setUser }) => {
   const [height, setHeight] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState(""); // patient or doctor
+  const [avatar, setAvatar] = useState(null); // new
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!role) return alert("Please select a role!");
+
     setLoading(true);
 
-    const newUser = {
-      fullName: fullName.trim(),
-      age: Number(age),
-      sex,
-      weight: weight ? parseFloat(weight) : null,
-      height: height ? parseFloat(height) : null,
-      email: email.trim(),
-      password: password.trim(),
-    };
-
     try {
+      const formData = new FormData();
+      formData.append("fullName", fullName.trim());
+      formData.append("age", age);
+      formData.append("sex", sex);
+      formData.append("weight", weight || "");
+      formData.append("height", height || "");
+      formData.append("email", email.trim());
+      formData.append("password", password.trim());
+      formData.append("role", role);
+      if (avatar) formData.append("avatar", avatar);
+
       const res = await fetch(`${BASE_URL}/api/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
+        body: formData,
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.error || "Signup failed");
 
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -108,6 +111,7 @@ const SignUp = ({ setUser }) => {
           value={height}
           onChange={(e) => setHeight(e.target.value)}
         />
+
         <input
           type="email"
           placeholder="Email"
@@ -122,7 +126,48 @@ const SignUp = ({ setUser }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" disabled={loading}>
+
+        {/* Role Selector */}
+        <div className="sex-selector">
+          <label>
+            <input
+              type="radio"
+              value="patient"
+              checked={role === "patient"}
+              onChange={(e) => setRole(e.target.value)}
+            />
+            <span>Patient</span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="doctor"
+              checked={role === "doctor"}
+              onChange={(e) => setRole(e.target.value)}
+            />
+            <span>Doctor</span>
+          </label>
+        </div>
+
+        {/* Avatar Upload */}
+        <label className="avatar-upload">
+          {avatar ? avatar.name : "Click to upload profile photo"}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setAvatar(e.target.files[0])}
+          />
+        </label>
+
+        {/* Preview */}
+        {avatar && (
+          <div className="avatar-preview">
+            <img src={URL.createObjectURL(avatar)} alt="Avatar Preview" />
+          </div>
+        )}
+
+        {/* Sign Up Button */}
+        <button type="submit" disabled={loading || !role}>
           {loading ? "Signing Up..." : "Sign Up"}
         </button>
       </form>
