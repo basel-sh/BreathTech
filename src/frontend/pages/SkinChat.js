@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./SkinChat.css";
 
 function SkinChat() {
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [cameraActive, setCameraActive] = useState(false);
-  const [capturedFile, setCapturedFile] = useState(null);
 
-  // Map for skin diseases
+  // Map for skin diseases (adjust to your model labels)
   const skinDiagnosisMap = {
     0: "Acne",
     1: "Bacterial Impetigo/Cellulitis",
@@ -22,36 +19,25 @@ function SkinChat() {
     8: "Urticaria/Hives",
   };
 
-  // Detect mobile devices
-  useEffect(() => {
-    setIsMobile(/Mobi|Android/i.test(navigator.userAgent));
-  }, []);
-
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
-    setCapturedFile(null);
     setPrediction(null);
   };
 
-  const handleCapture = (e) => {
-    if (e.target.files[0]) {
-      setCapturedFile(e.target.files[0]);
-      setFile(null);
-      setPrediction(null);
-    }
-  };
-
-  const handleUpload = async (inputFile) => {
-    if (!inputFile) return alert("Please select or capture an image first!");
+  const handleUpload = async () => {
+    if (!file) return alert("Please select an image first!");
     setLoading(true);
 
     try {
       const formData = new FormData();
-      formData.append("file", inputFile);
+      formData.append("file", file);
 
       const response = await fetch(
         "https://breath-tech-backend-production.up.railway.app/api/skin-diagnose",
-        { method: "POST", body: formData }
+        {
+          method: "POST",
+          body: formData,
+        }
       );
 
       if (!response.ok) {
@@ -76,54 +62,21 @@ function SkinChat() {
   return (
     <div className="skinchat-container">
       <h2>Skin AI Assistant</h2>
-      <p>Upload or capture a photo of the affected area</p>
+      <p>Upload a photo of the affected area</p>
 
       <div className="chat-input-container">
-        {/* File Upload */}
         <div className="file-input-wrapper">
           <input
             type="file"
             id="skinFileInput"
             accept="image/*"
             onChange={handleFileChange}
-            disabled={cameraActive}
           />
-          <label
-            htmlFor="skinFileInput"
-            className="file-btn"
-            style={{ opacity: cameraActive ? 0.5 : 1 }}
-          >
+          <label htmlFor="skinFileInput" className="file-btn">
             {file ? file.name : "Choose Image"}
           </label>
         </div>
-
-        {/* Camera Capture (Mobile only) */}
-        {isMobile && (
-          <div className="file-input-wrapper">
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              id="cameraInput"
-              onChange={handleCapture}
-              disabled={file !== null}
-            />
-            <label
-              htmlFor="cameraInput"
-              className="file-btn"
-              style={{ opacity: file ? 0.5 : 1 }}
-            >
-              {capturedFile ? capturedFile.name : "Capture with Camera"}
-            </label>
-          </div>
-        )}
-
-        {/* Upload & Diagnose */}
-        <button
-          className="send-btn"
-          onClick={() => handleUpload(file || capturedFile)}
-          disabled={loading || (!file && !capturedFile)}
-        >
+        <button className="send-btn" onClick={handleUpload} disabled={loading}>
           {loading ? "Analyzing..." : "Upload & Diagnose"}
         </button>
       </div>
