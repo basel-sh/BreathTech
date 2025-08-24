@@ -1,6 +1,10 @@
 fastapi
 uvicorn
-numpy
-librosa
+onnxruntime
 tensorflow
+numpy
+opencv-python-headless
+librosa
+soundfile
+requests
 python-multipart

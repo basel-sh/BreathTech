@@ -6,7 +6,17 @@ function LungsChat() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Example patient info
+  const diagnosisMap = {
+    0: "Healthy",
+    1: "URTI",
+    2: "Asthma",
+    3: "COPD",
+    4: "LRTI",
+    5: "Bronchiectasis",
+    6: "Pneumonia",
+    7: "Bronchiolitis",
+  };
+
   const patientInfo = {
     Age: 25,
     BMI: 22,
@@ -56,7 +66,11 @@ function LungsChat() {
       }
 
       const data = await response.json();
-      setPrediction(data.prediction);
+      const diagnosis =
+        data.prediction in diagnosisMap
+          ? diagnosisMap[data.prediction]
+          : "Unknown";
+      setPrediction(diagnosis);
     } catch (err) {
       alert("Error: " + err.message);
     } finally {
@@ -70,15 +84,28 @@ function LungsChat() {
       <p>Upload your lung sound recording (WAV/MP3)</p>
 
       <div className="chat-input-container">
-        <input type="file" accept="audio/*" onChange={handleFileChange} />
+        {/* Hidden file input */}
+        <div className="file-input-wrapper">
+          <input
+            type="file"
+            id="fileInput"
+            accept="audio/*"
+            onChange={handleFileChange}
+          />
+          {/* Custom file button */}
+
+          <label htmlFor="fileInput" className="file-btn">
+            {file ? file.name : "Choose File"}
+          </label>
+        </div>
         <button className="send-btn" onClick={handleUpload} disabled={loading}>
           {loading ? "Predicting..." : "Upload & Predict"}
         </button>
       </div>
 
-      {prediction !== null && (
+      {prediction && (
         <div className="chat-messages">
-          <div className="message bot">Predicted Class: {prediction}</div>
+          <div className="message bot">Predicted Diagnosis: {prediction}</div>
         </div>
       )}
     </div>

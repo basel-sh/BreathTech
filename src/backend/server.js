@@ -63,7 +63,7 @@ const User = mongoose.model("User", userSchema);
 // Root route
 app.get("/", (req, res) => res.send("🚀 BreathTech Backend is Running!"));
 
-// Register new user with optional avatar
+// Register new user
 app.post("/api/register", uploadAvatar.single("avatar"), async (req, res) => {
   try {
     const { fullName, age, sex, weight, height, email, password, role } =
@@ -103,7 +103,7 @@ app.post("/api/register", uploadAvatar.single("avatar"), async (req, res) => {
   }
 });
 
-// Login user
+// Login
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -120,7 +120,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// Update user profile with optional avatar or delete avatar
+// Update profile
 app.put(
   "/api/update-profile",
   uploadAvatar.single("avatar"),
@@ -131,10 +131,8 @@ app.put(
       const updateData = { fullName, age, weight, height, conditions };
 
       if (req.file) {
-        // New avatar uploaded
         updateData.avatar = "/uploads/" + req.file.filename;
       } else if (avatar === "") {
-        // Delete avatar: set back to default
         updateData.avatar = "/default-avatar.png";
       }
 
@@ -169,8 +167,12 @@ app.delete("/api/delete-account", async (req, res) => {
   }
 });
 
-// AI Prediction Proxy
+// ===================== AI PROXIES =====================
+
+// Multer for AI uploads
 const upload = multer();
+
+// Old AI model (breath/audio)
 app.post("/api/predict", upload.single("file"), async (req, res) => {
   try {
     if (!req.file)
@@ -182,11 +184,35 @@ app.post("/api/predict", upload.single("file"), async (req, res) => {
       contentType: req.file.mimetype,
     });
 
-    // forward all other fields
-    Object.keys(req.body).forEach((key) => form.append(key, req.body[key]));
+    // Ensure all required fields are sent as strings
+    const requiredFields = [
+      "Age",
+      "BMI",
+      "Is_Adult",
+      "Has_Crackles",
+      "Has_Wheezes",
+      "SBP",
+      "DBP",
+      "HR",
+      "SpO2",
+      "Sex_M",
+      "Chest_Location_Al",
+      "Chest_Location_Ar",
+      "Chest_Location_Pl",
+      "Chest_Location_Pr",
+      "Chest_Location_Ll",
+      "Chest_Location_Lr",
+    ];
+
+    requiredFields.forEach((key) => {
+      if (!(key in req.body)) {
+        throw new Error(`Missing field: ${key}`);
+      }
+      form.append(key, req.body[key].toString());
+    });
 
     const response = await fetch(
-      "https://pulmonary-aimodelbackend-host-production.up.railway.app/predict",
+      "https://breathtech-ai-models-hoting-production.up.railway.app/predict",
       { method: "POST", body: form }
     );
 
@@ -199,6 +225,35 @@ app.post("/api/predict", upload.single("file"), async (req, res) => {
       .json({ message: "Prediction failed", error: err.toString() });
   }
 });
+
+// New AI model (skin diagnosis)
+app.post("/api/skin-diagnose", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file)
+      return res.status(400).json({ error: "No image file uploaded" });
+
+    const form = new FormData();
+    form.append("file", req.file.buffer, {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
+
+    const response = await fetch(
+      "https://breathtech-ai-models-hoting-production.up.railway.app/diagnose",
+      { method: "POST", body: form }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Skin model proxy error:", err);
+    res
+      .status(500)
+      .json({ message: "Skin diagnosis failed", error: err.toString() });
+  }
+});
+
+// ======================================================
 
 // Start server
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

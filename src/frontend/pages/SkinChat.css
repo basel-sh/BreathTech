@@ -1,5 +1,4 @@
-/* Container */
-.lungschat-container {
+.skinchat-container {
   max-width: 800px;
   margin: 80px auto 40px;
   padding: 25px;
@@ -11,7 +10,6 @@
   transition: background 0.3s, color 0.3s;
 }
 
-/* Chat messages */
 .chat-messages {
   max-height: 450px;
   overflow-y: auto;
@@ -21,7 +19,6 @@
   margin-top: 20px;
 }
 
-/* Individual message */
 .message {
   padding: 14px 18px;
   border-radius: 14px;
@@ -30,38 +27,31 @@
   transition: background 0.3s, color 0.3s;
 }
 
-.message.user {
-  background-color: var(--button-bg, #0ea5e9);
-  color: var(--button-text, #fff);
-  align-self: flex-end;
-}
-
 .message.bot {
   background-color: var(--card-bg, #f0f0f0);
   color: var(--text);
   align-self: flex-start;
 }
 
-/* Input section */
 .chat-input-container {
   display: flex;
   flex-wrap: wrap;
   margin-top: 15px;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .chat-input-container div,
 .send-btn {
   width: 45%;
 }
-/* Hidden file input */
+
 input[type="file"] {
   display: none;
 }
 
-/* Custom file button */
-.chat-input-container > div .file-btn {
+.file-btn {
   display: block;
   width: 100%;
   padding: 0 16px;
@@ -74,15 +64,14 @@ input[type="file"] {
   font-size: 16px;
   height: 48px;
   line-height: 48px;
-  transition: background 0.3s, transform 0.2s;
+  transition: background 0.3s, transform 0.2s, opacity 0.3s;
 }
 
-.chat-input-container > div .file-btn:hover {
+.file-btn:hover {
   background-color: var(--button-hover, #0284c7);
   transform: translateY(-2px);
 }
 
-/* Send button */
 .send-btn {
   flex: 0 0 auto;
   padding: 0 18px;
@@ -106,25 +95,43 @@ input[type="file"] {
 .send-btn:disabled {
   background-color: #999;
   cursor: not-allowed;
+  opacity: 0.6;
   transform: none;
+}
+
+.camera-preview {
+  width: 100%;
+  max-height: 250px;
+  border-radius: 14px;
+  margin-top: 8px;
+  object-fit: cover;
+}
+
+.cancel-btn {
+  background-color: #f87171;
+  margin-top: 5px;
+}
+
+.captured-name {
+  display: block;
+  margin-top: 5px;
+  font-weight: 500;
 }
 
 /* Scrollbar styling */
 .chat-messages::-webkit-scrollbar {
   width: 6px;
 }
-
 .chat-messages::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
 }
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
-  .lungschat-container {
+  .skinchat-container {
     margin: 60px 16px 20px;
     padding: 18px;
   }
-
   .chat-input-container > div .file-btn,
   .send-btn {
     font-size: 15px;
@@ -132,7 +139,6 @@ input[type="file"] {
     line-height: 44px;
     padding: 0 14px;
   }
-
   .message {
     font-size: 15px;
   }
@@ -143,7 +149,6 @@ input[type="file"] {
     flex-direction: column;
     gap: 10px;
   }
-
   .chat-input-container > div .file-btn,
   .send-btn {
     width: 100%;
@@ -153,13 +158,11 @@ input[type="file"] {
     padding: 0 12px;
     text-align: center;
   }
-
   .message {
     max-width: 100%;
   }
-
   .chat-input-container {
-    all: initial; /* Resets all properties to their initial values */
+    all: initial;
     display: flex;
     flex-direction: column;
     gap: 40px;
