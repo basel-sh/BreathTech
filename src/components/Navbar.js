@@ -1,6 +1,6 @@
 // Navbar.js
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import WebsiteMainLogo from "../assets/HQWebsiteLogo2.png";
 import defaultAvatar from "../assets/avatar.png";
 import "./NavbarCSS.css";
@@ -8,6 +8,7 @@ import "./NavbarCSS.css";
 const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 const Navbar = () => {
+  const location = useLocation();
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "dark"
   );
@@ -26,7 +27,7 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [theme]);
 
-  // Fetch user and auto-refresh on tab focus
+  // Always fetch user status on route change or page focus
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
@@ -40,25 +41,30 @@ const Navbar = () => {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (res.ok) {
           const data = await res.json();
-          setUser(data.user);
-          localStorage.setItem("user", JSON.stringify(data.user));
+          if (data.user) {
+            setUser(data.user);
+            localStorage.setItem("user", JSON.stringify(data.user));
+          } else {
+            throw new Error("User not found");
+          }
         } else {
-          setUser(null);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          throw new Error("Token invalid or user deleted");
         }
       } catch (err) {
-        console.error("Failed to fetch user:", err);
+        console.warn("User session invalid:", err.message);
         setUser(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     };
 
     fetchUser();
-    window.addEventListener("focus", fetchUser); // refresh on tab focus
+    window.addEventListener("focus", fetchUser);
     return () => window.removeEventListener("focus", fetchUser);
-  }, []);
+  }, [location.pathname]);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -92,7 +98,7 @@ const Navbar = () => {
     </Link>
   );
 
-  // Always fresh avatar
+  // Cache-buster avatar
   const avatarSrc =
     user && user.avatar && user.avatar !== "/default-avatar.png"
       ? `${BASE_URL}${user.avatar}?t=${Date.now()}`
