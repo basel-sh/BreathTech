@@ -6,6 +6,7 @@ import LungsDoctorImg from "../../assets/LungsDoctor.png";
 import SkinsDoctorImg from "../../assets/SkinDoctor.png";
 import GeneralDoctorImg from "../../assets/GeneralDoctor.png";
 import HomeAiDoctor from "../../assets/HomeVideo.mp4";
+import HeartDoctorImg from "../../assets/HeartDoctor.png";
 
 const cards = [
   {
@@ -27,22 +28,10 @@ const cards = [
     img: SkinsDoctorImg,
   },
   {
-    title: "General Health",
+    title: "Heart Analysis",
     accuracy: 85,
-    to: "/general-chat",
-    img: GeneralDoctorImg,
-  },
-  {
-    title: "Lungs Diagnosis",
-    accuracy: 87,
-    to: "/lungs-chat",
-    img: LungsDoctorImg,
-  },
-  {
-    title: "Skin Analysis",
-    accuracy: 92,
-    to: "/skin-chat",
-    img: SkinsDoctorImg,
+    to: "/heart-chat",
+    img: HeartDoctorImg,
   },
 ];
 
@@ -139,9 +128,10 @@ const Home = ({ user }) => {
           <div ref={scrollerRef} className="scroller">
             {cards.map((card, i) => {
               const isDisabled =
-                currentUser &&
-                currentUser.role === "patient" &&
-                card.title !== "General Health";
+                card.title === "Heart Analysis" || // 🔴 Always disable Heart Analysis
+                (currentUser &&
+                  currentUser.role === "patient" &&
+                  card.title !== "General Health");
 
               return (
                 <div
@@ -161,7 +151,9 @@ const Home = ({ user }) => {
                       disabled={isDisabled}
                       onClick={() => handleCardClick(card)}
                     >
-                      Diagnose Now
+                      {card.title === "Heart Analysis"
+                        ? "Coming Soon 🚧"
+                        : "Diagnose Now"}
                     </button>
                   </div>
                 </div>

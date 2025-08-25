@@ -38,6 +38,7 @@ const Navbar = ({ user }) => {
   // Disable links based on user role
   const isLinkDisabled = (linkName) => {
     if (linkName === "Home") return false;
+    if (linkName === "Heart Chat") return true; // 🔴 Always disabled
     if (!user) return true;
     if (user.role === "patient" && linkName !== "General Chat") return true;
     return false;
@@ -100,6 +101,7 @@ const Navbar = ({ user }) => {
               {renderLink("/", "Home")}
               {renderLink("/lungs-chat", "Lungs Chat")}
               {renderLink("/skin-chat", "Skin Chat")}
+              {renderLink("/heart-chat", "Heart Chat")}
               {renderLink("/general-chat", "General Chat")}
             </div>
 
@@ -148,6 +150,7 @@ const Navbar = ({ user }) => {
             {renderLink("/", "Home")}
             {renderLink("/lungs-chat", "Lungs Chat")}
             {renderLink("/skin-chat", "Skin Chat")}
+            {renderLink("/heart-chat", "Heart Chat")}
             {renderLink("/general-chat", "General Chat")}
 
             <div className="mobile-actions">

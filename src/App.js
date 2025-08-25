@@ -8,6 +8,7 @@ import Signup from "./frontend/pages/Signup";
 import Profile from "./frontend/pages/Profile";
 import LungsChat from "./frontend/pages/LungsChat";
 import SkinChat from "./frontend/pages/SkinChat";
+import HeartAnalysis from "./frontend/pages/HeartAnalysis";
 import GeneralChat from "./frontend/pages/GeneralChat";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           />
           <Route path="/lungs-chat" element={<LungsChat />} />
           <Route path="/skin-chat" element={<SkinChat />} />
+          <Route path="/heart-chat" element={<HeartAnalysis />} />
           <Route path="/general-chat" element={<GeneralChat />} />
         </Routes>
       </div>
