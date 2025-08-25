@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import useCurrentUser from "../../hooks/useCurrentUser"; // ✅ hook
 import "./Home.css";
 
 import LungsDoctorImg from "../../assets/LungsDoctor.png";
@@ -32,7 +33,7 @@ const cards = [
     accuracy: 85,
     to: "/heart-chat",
     img: HeartDoctorImg,
-  },
+  }, // 🚧 disabled
 ];
 
 const aboutCards = [
@@ -46,17 +47,18 @@ const aboutCards = [
   },
 ];
 
-const Home = ({ user }) => {
-  const scrollerRef = useRef(null);
+const Home = () => {
   const navigate = useNavigate();
-  const currentUser = user || JSON.parse(localStorage.getItem("user"));
+  const scrollerRef = useRef(null);
+  const currentUser = useCurrentUser(); // ✅ auto-refreshing
 
   const scroll = (dir) => {
-    if (!scrollerRef.current) return;
-    scrollerRef.current.scrollBy({
-      left: dir === "left" ? -320 : 320,
-      behavior: "smooth",
-    });
+    if (scrollerRef.current) {
+      scrollerRef.current.scrollBy({
+        left: dir === "left" ? -320 : 320,
+        behavior: "smooth",
+      });
+    }
   };
 
   const handleCardClick = (card) => {
@@ -75,7 +77,7 @@ const Home = ({ user }) => {
   };
 
   return (
-    <div style={{ background: "transparent", margin: 0, padding: 0 }}>
+    <div className="homeWrapper">
       {/* HERO */}
       <section className="hero">
         <video autoPlay loop muted playsInline className="heroVideo">
@@ -91,7 +93,7 @@ const Home = ({ user }) => {
         </div>
       </section>
 
-      {/* ABOUT OUR IDEA */}
+      {/* ABOUT */}
       <section className="aboutIdea">
         <h2 className="sectionTitle">About Our Idea</h2>
         <div className="aboutCardsContainer">
@@ -102,6 +104,7 @@ const Home = ({ user }) => {
             </div>
           ))}
         </div>
+
         {!currentUser && (
           <button className="signupBtn" onClick={() => navigate("/signup")}>
             Sign Up to Access
@@ -111,28 +114,23 @@ const Home = ({ user }) => {
 
       <hr className="fancySeparator" />
 
-      {/* CARDS / SESSIONS */}
+      {/* AI MODELS CAROUSEL */}
       <section className="cardsSection">
         <h2 className="sectionTitle">Explore Our AI Specialties</h2>
-
         <div className="carousel">
           <button
             onClick={() => scroll("left")}
             className="arrowBtn"
             style={{ left: 8 }}
-            aria-label="Scroll left"
           >
             ‹
           </button>
-
           <div ref={scrollerRef} className="scroller">
             {cards.map((card, i) => {
               const isDisabled =
-                card.title === "Heart Analysis" || // 🔴 Always disable Heart Analysis
-                (currentUser &&
-                  currentUser.role === "patient" &&
+                card.title === "Heart Analysis" ||
+                (currentUser?.role === "patient" &&
                   card.title !== "General Health");
-
               return (
                 <div
                   key={i}
@@ -160,12 +158,10 @@ const Home = ({ user }) => {
               );
             })}
           </div>
-
           <button
             onClick={() => scroll("right")}
             className="arrowBtn"
             style={{ right: 8 }}
-            aria-label="Scroll right"
           >
             ›
           </button>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import WebsiteMainLogo from "../assets/HQWebsiteLogo2.png";
-import defaultAvatar from "../assets/avatar.png"; // default avatar
+import defaultAvatar from "../assets/avatar.png";
 import "./NavbarCSS.css";
 
 const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
@@ -14,9 +14,9 @@ const Navbar = () => {
   const [lang, setLang] = useState("EN");
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [user, setUser] = useState(null); // ✅ local user state
+  const [user, setUser] = useState(null);
 
-  // Detect window size + handle theme persistence
+  // Handle window resize and theme persistence
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
@@ -26,26 +26,28 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [theme]);
 
-  // ✅ Fetch latest user info on mount
+  // Fetch user and auto-refresh on tab focus
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setUser(null);
-      return;
-    }
-
     const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
       try {
         const res = await fetch(`${BASE_URL}/api/profile`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
-
         if (res.ok) {
           const data = await res.json();
-          setUser(data.user); // server must return { user }
+          setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
         } else {
           setUser(null);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
         }
       } catch (err) {
         console.error("Failed to fetch user:", err);
@@ -54,7 +56,9 @@ const Navbar = () => {
     };
 
     fetchUser();
-  }, []); // only once on mount
+    window.addEventListener("focus", fetchUser); // refresh on tab focus
+    return () => window.removeEventListener("focus", fetchUser);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -66,10 +70,10 @@ const Navbar = () => {
   const toggleLang = () => setLang(lang === "EN" ? "AR" : "EN");
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  // Disable links based on user role
+  // Link access rules
   const isLinkDisabled = (linkName) => {
     if (linkName === "Home") return false;
-    if (linkName === "Heart Chat") return true; // 🔴 Always disabled
+    if (linkName === "Heart Chat") return true;
     if (!user) return true;
     if (user.role === "patient" && linkName !== "General Chat") return true;
     return false;
@@ -88,10 +92,10 @@ const Navbar = () => {
     </Link>
   );
 
-  // ✅ Always fresh avatar
+  // Always fresh avatar
   const avatarSrc =
     user && user.avatar && user.avatar !== "/default-avatar.png"
-      ? `${BASE_URL}${user.avatar}?t=${Date.now()}` // cache-buster
+      ? `${BASE_URL}${user.avatar}?t=${Date.now()}`
       : defaultAvatar;
 
   return (

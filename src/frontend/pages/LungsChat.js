@@ -1,10 +1,51 @@
-import React, { useState } from "react";
+// LungsChat.js
+import React, { useState, useEffect } from "react";
 import "./LungsChat.css";
+
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 function LungsChat() {
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  // ✅ Always fetch the latest user info
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        setLoadingUser(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${BASE_URL}/api/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
+        } else {
+          setUser(null);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+        }
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+        setUser(null);
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    fetchUser();
+    window.addEventListener("focus", fetchUser); // auto-refresh on tab focus
+    return () => window.removeEventListener("focus", fetchUser);
+  }, []);
 
   const diagnosisMap = {
     0: "Healthy",
@@ -43,8 +84,12 @@ function LungsChat() {
 
   const handleUpload = async () => {
     if (!file) return alert("Please select an audio file first!");
-    setLoading(true);
+    if (!user) return alert("⚠️ You must be logged in to use this feature.");
+    if (user.role === "patient" && !user.permissions?.lungsChat) {
+      return alert("⚠️ Patients are not allowed to use Lungs AI.");
+    }
 
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -52,13 +97,10 @@ function LungsChat() {
         formData.append(key, value)
       );
 
-      const response = await fetch(
-        "https://breath-tech-backend-production.up.railway.app/api/predict",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/predict`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -78,13 +120,14 @@ function LungsChat() {
     }
   };
 
+  if (loadingUser) return <p>Loading user info...</p>;
+
   return (
     <div className="lungschat-container">
       <h2>Lungs AI Assistant</h2>
       <p>Upload your lung sound recording (WAV/MP3)</p>
 
       <div className="chat-input-container">
-        {/* Hidden file input */}
         <div className="file-input-wrapper">
           <input
             type="file"
@@ -92,8 +135,6 @@ function LungsChat() {
             accept="audio/*"
             onChange={handleFileChange}
           />
-          {/* Custom file button */}
-
           <label htmlFor="fileInput" className="file-btn">
             {file ? file.name : "Choose File"}
           </label>
