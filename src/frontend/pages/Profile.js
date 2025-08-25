@@ -10,23 +10,45 @@ const Profile = ({ user, setUser }) => {
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [avatarFile, setAvatarFile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      const savedUser = JSON.parse(localStorage.getItem("user"));
-      if (savedUser) {
-        setUser(savedUser);
-        setFormData(savedUser);
-      } else {
-        navigate("/login");
-      }
-    } else {
-      setFormData(user);
-    }
-  }, [user, setUser, navigate]);
+  const token = localStorage.getItem("token");
 
-  if (!user) return <p>Loading profile...</p>;
+  // Fetch latest profile from backend (no stale localStorage data)
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch profile");
+
+        const data = await res.json();
+        setUser(data.user);
+        setFormData(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user)); // ✅ sync localStorage
+      } catch (err) {
+        console.error("Profile fetch error:", err);
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [token, setUser, navigate]);
+
+  if (loading) return <p>Loading profile...</p>;
+  if (!user) return <p>No profile data found. Please log in again.</p>;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,7 +57,6 @@ const Profile = ({ user, setUser }) => {
   const handleUpdate = async () => {
     try {
       const formDataUpdate = new FormData();
-      formDataUpdate.append("email", formData.email);
       formDataUpdate.append("fullName", formData.fullName);
       formDataUpdate.append("age", formData.age);
       formDataUpdate.append("weight", formData.weight || "");
@@ -45,12 +66,12 @@ const Profile = ({ user, setUser }) => {
       if (avatarFile) {
         formDataUpdate.append("avatar", avatarFile);
       } else if (formData.avatar === "") {
-        // signal backend to delete avatar
-        formDataUpdate.append("avatar", "");
+        formDataUpdate.append("avatar", ""); // signal delete
       }
 
       const res = await fetch(`${BASE_URL}/api/update-profile`, {
         method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
         body: formDataUpdate,
       });
 
@@ -59,8 +80,8 @@ const Profile = ({ user, setUser }) => {
       if (res.ok) {
         setMessage("✅ Profile updated successfully!");
         setUser(data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
         setFormData(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user)); // ✅ update storage
         setEditing(false);
         setAvatarFile(null);
       } else {
@@ -79,12 +100,14 @@ const Profile = ({ user, setUser }) => {
     try {
       const res = await fetch(`${BASE_URL}/api/delete-account`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: user.email }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (res.ok) {
         setMessage("🗑️ Account deleted successfully.");
+        localStorage.removeItem("token");
         localStorage.removeItem("user");
         setUser(null);
         navigate("/");
@@ -98,12 +121,12 @@ const Profile = ({ user, setUser }) => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
     navigate("/");
   };
 
-  // Avatar source: uploaded file > backend avatar > local default
   const avatarSrc = avatarFile
     ? URL.createObjectURL(avatarFile)
     : formData.avatar && formData.avatar !== "/default-avatar.png"
@@ -120,7 +143,6 @@ const Profile = ({ user, setUser }) => {
         </p>
       )}
 
-      {/* Avatar */}
       <img src={avatarSrc} alt="Profile" className="profile-avatar" />
 
       {!editing ? (
@@ -201,7 +223,6 @@ const Profile = ({ user, setUser }) => {
             placeholder="Medical Conditions"
           />
 
-          {/* Upload new avatar */}
           <label className="avatar-upload">
             {avatarFile ? avatarFile.name : "Click to upload new avatar"}
             <input
@@ -217,7 +238,6 @@ const Profile = ({ user, setUser }) => {
             </div>
           )}
 
-          {/* Delete avatar button */}
           {formData.avatar &&
             formData.avatar !== "/default-avatar.png" &&
             !avatarFile && (

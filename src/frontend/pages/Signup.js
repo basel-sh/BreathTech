@@ -13,8 +13,8 @@ const SignUp = ({ setUser }) => {
   const [height, setHeight] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(""); // patient or doctor
-  const [avatar, setAvatar] = useState(null); // new
+  const [role, setRole] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -43,8 +43,23 @@ const SignUp = ({ setUser }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");
 
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
+      // ✅ Save only the token in localStorage
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      // ✅ Immediately fetch the profile using token
+      if (data.token) {
+        const profileRes = await fetch(`${BASE_URL}/api/profile`, {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        });
+        const profileData = await profileRes.json();
+        if (profileRes.ok) {
+          setUser(profileData.user); // keep user in React state
+        }
+      }
 
       alert("Signup successful!");
       navigate("/profile");

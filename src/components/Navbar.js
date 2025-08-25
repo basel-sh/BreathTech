@@ -7,15 +7,16 @@ import "./NavbarCSS.css";
 
 const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "dark"
   );
   const [lang, setLang] = useState("EN");
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [user, setUser] = useState(null); // ✅ local user state
 
-  // Detect window size
+  // Detect window size + handle theme persistence
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
@@ -24,6 +25,36 @@ const Navbar = ({ user }) => {
     localStorage.setItem("theme", theme);
     return () => window.removeEventListener("resize", handleResize);
   }, [theme]);
+
+  // ✅ Fetch latest user info on mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/profile`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user); // server must return { user }
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, []); // only once on mount
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -57,10 +88,10 @@ const Navbar = ({ user }) => {
     </Link>
   );
 
-  // Reactive avatar source
+  // ✅ Always fresh avatar
   const avatarSrc =
     user && user.avatar && user.avatar !== "/default-avatar.png"
-      ? `${BASE_URL}${user.avatar}`
+      ? `${BASE_URL}${user.avatar}?t=${Date.now()}` // cache-buster
       : defaultAvatar;
 
   return (
@@ -134,7 +165,6 @@ const Navbar = ({ user }) => {
                     src={avatarSrc}
                     alt="Profile Avatar"
                     className="avatar"
-                    key={avatarSrc} // forces re-render on change
                   />
                 </Link>
               )}
@@ -173,12 +203,7 @@ const Navbar = ({ user }) => {
                   </>
                 ) : (
                   <Link to="/profile" onClick={toggleMenu}>
-                    <img
-                      src={avatarSrc}
-                      alt="Profile"
-                      className="avatar"
-                      key={avatarSrc} // forces re-render
-                    />
+                    <img src={avatarSrc} alt="Profile" className="avatar" />
                   </Link>
                 )}
               </div>

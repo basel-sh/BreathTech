@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // <--- Replace with your Railway URL
+const BASE_URL = "https://breath-tech-backend-production.up.railway.app"; // ✅ Your backend URL
+
 const Login = ({ setUser }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -30,11 +31,14 @@ const Login = ({ setUser }) => {
         return;
       }
 
+      // ✅ Save token + user in localStorage
+      localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
-      navigate("/profile");
+
+      setUser(data.user); // Update React state
+      navigate("/profile"); // Redirect to profile
     } catch (err) {
-      console.error("Backend error:", err);
+      console.error("❌ Backend error:", err);
       setError("Server error. Try again later.");
     }
   };
@@ -51,6 +55,7 @@ const Login = ({ setUser }) => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Password"
@@ -58,7 +63,9 @@ const Login = ({ setUser }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           {error && <p className="error">{error}</p>}
+
           <button type="submit">Log In</button>
         </form>
       </div>
