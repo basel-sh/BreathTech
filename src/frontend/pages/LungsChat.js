@@ -1,23 +1,26 @@
 // LungsChat.js
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./LungsChat.css";
 
 const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 function LungsChat() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
-  // ✅ Always fetch the latest user info
+  // ✅ Fetch latest user info and redirect if deleted or role/permissions changed
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setUser(null);
         setLoadingUser(false);
+        navigate("/"); // redirect if not logged in
         return;
       }
 
@@ -25,27 +28,38 @@ function LungsChat() {
         const res = await fetch(`${BASE_URL}/api/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));
+
+          // redirect if role is patient or lungsChat permission is false
+          if (
+            data.user.role === "patient" ||
+            !data.user.permissions?.lungsChat
+          ) {
+            navigate("/");
+          }
         } else {
           setUser(null);
           localStorage.removeItem("token");
           localStorage.removeItem("user");
+          navigate("/"); // redirect if user deleted
         }
       } catch (err) {
         console.error("Failed to fetch user:", err);
         setUser(null);
+        navigate("/"); // redirect on error
       } finally {
         setLoadingUser(false);
       }
     };
 
     fetchUser();
-    window.addEventListener("focus", fetchUser); // auto-refresh on tab focus
+    window.addEventListener("focus", fetchUser); // refresh on tab focus
     return () => window.removeEventListener("focus", fetchUser);
-  }, []);
+  }, [navigate]);
 
   const diagnosisMap = {
     0: "Healthy",

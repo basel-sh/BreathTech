@@ -1,23 +1,26 @@
 // SkinChat.js
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SkinChat.css";
 
 const BASE_URL = "https://breath-tech-backend-production.up.railway.app";
 
 function SkinChat() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
-  // ✅ Always fetch the latest user info
+  // ✅ Always fetch latest user info and auto-refresh
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setUser(null);
         setLoadingUser(false);
+        navigate("/"); // redirect if no token
         return;
       }
 
@@ -30,14 +33,24 @@ function SkinChat() {
           const data = await res.json();
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));
+
+          // redirect if role is patient or skinChat permission is false
+          if (
+            data.user.role === "patient" ||
+            !data.user.permissions?.skinChat
+          ) {
+            navigate("/");
+          }
         } else {
           setUser(null);
           localStorage.removeItem("token");
           localStorage.removeItem("user");
+          navigate("/"); // redirect if user deleted
         }
       } catch (err) {
         console.error("Failed to fetch user:", err);
         setUser(null);
+        navigate("/"); // redirect on error
       } finally {
         setLoadingUser(false);
       }
@@ -46,7 +59,7 @@ function SkinChat() {
     fetchUser();
     window.addEventListener("focus", fetchUser); // refresh on tab focus
     return () => window.removeEventListener("focus", fetchUser);
-  }, []);
+  }, [navigate]);
 
   const skinDiagnosisMap = {
     0: "Acne",
@@ -73,7 +86,6 @@ function SkinChat() {
     }
 
     setLoading(true);
-
     try {
       const formData = new FormData();
       formData.append("file", file);
