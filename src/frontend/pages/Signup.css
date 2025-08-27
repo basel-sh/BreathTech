@@ -25,14 +25,11 @@
   gap: 14px;
 }
 
-/* Inputs */
-.signup-container input[type="text"],
-.signup-container input[type="email"],
-.signup-container input[type="password"],
-.signup-container input[type="number"] {
+/* All inputs with borders */
+.input-bordered {
   padding: 12px 15px;
   border-radius: 10px;
-  border: 2px solid var(--border);
+  border: 2px solid var(--text-primary);
   outline: none;
   font-size: 16px;
   background: var(--input-bg);
@@ -40,14 +37,19 @@
   transition: all 0.3s ease;
 }
 
-.signup-container input:hover,
-.signup-container input:focus {
+.input-bordered:hover,
+.input-bordered:focus {
   border-color: var(--accent);
   box-shadow: 0px 0px 6px var(--accent);
   transform: translateY(-1px);
 }
 
-/* === Gender Selector === */
+.input-bordered.error {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 5px #ff4d4f;
+}
+
+/* Gender / Role Selector */
 .sex-selector {
   display: flex;
   justify-content: space-between;
@@ -60,35 +62,132 @@
   background: var(--card-bg-alt);
   padding: 12px;
   border-radius: 12px;
-  border: 2px solid var(--border);
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
   color: var(--text-primary);
 }
 
+.SPANOption {
+  display: block;
+  border: 2px solid var(--text-primary);
+  border-radius: 8px;
+  padding: 5px;
+  transition: all 0.3s ease;
+}
+
 .sex-selector input[type="radio"] {
   display: none;
 }
 
-.sex-selector label span {
+.sex-selector label:hover {
+  background: var(--hover-bg);
+}
+
+.sex-selector input[type="radio"]:checked + .SPANOption {
+  background: var(--accent);
+  color: var(--button-text);
+  transform: scale(1.1);
+}
+
+/* Avatar Upload */
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 12px;
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  border: 2px solid var(--text-primary);
+}
+
+.avatar-upload:hover {
+  border-color: var(--accent);
+  background: var(--hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-upload input[type="file"] {
+  display: none;
+}
+
+.avatar-preview {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-preview img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+}
+
+/* Error Messages */
+.error-msg {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: -8px;
+  margin-bottom: 8px;
   display: block;
 }
 
-.sex-selector label:hover {
-  background: var(--hover-bg);
-  border-color: var(--accent);
-  transform: translateY(-2px);
+/* Privacy Policy Checkbox */
+.policy-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  position: relative;
 }
 
-.sex-selector input[type="radio"]:checked + span {
+.policy-checkbox input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--text-primary);
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.policy-checkbox input[type="checkbox"]:checked {
   background: var(--accent);
-  color: var(--button-text);
-  border-radius: 8px;
-  padding: 6px 0;
+  border-color: var(--accent);
 }
 
-/* Button */
+.policy-checkbox input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: var(--button-text);
+  font-size: 16px;
+  position: absolute;
+  top: 0;
+  left: 3px;
+}
+
+.policy-checkbox a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.policy-checkbox a:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
 .signup-container button {
   margin-top: 10px;
   padding: 12px;
@@ -107,63 +206,29 @@
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
 }
-/* Avatar Upload Input */
-.signup-container .avatar-upload {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  border: 2px dashed var(--border);
-  border-radius: 12px;
-  background: var(--input-bg);
-  color: var(--text-secondary);
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
+
+.signup-container button:disabled {
+  background: var(--button-bg);
+  color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
 }
 
-.signup-container .avatar-upload:hover {
-  border-color: var(--accent);
-  background: var(--hover-bg);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.signup-container .avatar-upload input[type="file"] {
-  display: none;
-}
-
-.signup-container .avatar-preview {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-}
-
-.signup-container .avatar-preview img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-}
-
-/* === Responsive === */
+/* Responsive */
 @media (max-width: 600px) {
   .signup-container {
     padding: 25px 20px;
     margin: 40px auto 15px;
   }
-
   .signup-container h2 {
     font-size: 22px;
   }
-
   .signup-container button {
     font-size: 16px;
     padding: 10px;
   }
-
   .signup-container {
     margin-top: 100px;
   }

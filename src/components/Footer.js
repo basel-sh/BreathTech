@@ -23,6 +23,21 @@ const Footer = () => {
           <p className="text">📧 contact@breathtech.com</p>
           <p className="text">📞 +20 1068506907</p>
         </div>
+
+        {/* Privacy Policy */}
+        <div className="section">
+          <h3 className="heading">Legal</h3>
+          <p className="text">
+            <a
+              href="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="privacy-link"
+            >
+              Privacy Policy & Terms
+            </a>
+          </p>
+        </div>
       </div>
 
       {/* Copyright */}
