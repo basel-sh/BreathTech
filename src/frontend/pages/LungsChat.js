@@ -36,7 +36,7 @@ function LungsChat() {
 
           // redirect if role is patient or lungsChat permission is false
           if (
-            data.user.role === "patient" ||
+            data.user.role === "patient" &&
             !data.user.permissions?.lungsChat
           ) {
             navigate("/");

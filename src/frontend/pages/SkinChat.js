@@ -36,8 +36,8 @@ function SkinChat() {
 
           // redirect if role is patient or skinChat permission is false
           if (
-            data.user.role === "patient" ||
-            !data.user.permissions?.skinChat
+            data.user.role === "patient" &&
+            !data.user.permissions?.lungsChat
           ) {
             navigate("/");
           }
