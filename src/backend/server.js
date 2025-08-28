@@ -10,6 +10,8 @@ import fs from "fs";
 import jwt from "jsonwebtoken"; // ✅ NEW
 import bcrypt from "bcrypt"; // ✅ For password hashing
 
+const upload = multer();
+
 dotenv.config();
 
 const app = express();
@@ -204,7 +206,87 @@ app.get("/api/profile", authenticate, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// Old AI model (breath/audio)
+app.post("/api/predict", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file)
+      return res.status(400).json({ error: "No audio file uploaded" });
 
+    const form = new FormData();
+    form.append("file", req.file.buffer, {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
+
+    // Ensure all required fields are sent as strings
+    const requiredFields = [
+      "Age",
+      "BMI",
+      "Is_Adult",
+      "Has_Crackles",
+      "Has_Wheezes",
+      "SBP",
+      "DBP",
+      "HR",
+      "SpO2",
+      "Sex_M",
+      "Chest_Location_Al",
+      "Chest_Location_Ar",
+      "Chest_Location_Pl",
+      "Chest_Location_Pr",
+      "Chest_Location_Ll",
+      "Chest_Location_Lr",
+    ];
+
+    requiredFields.forEach((key) => {
+      if (!(key in req.body)) {
+        throw new Error(`Missing field: ${key}`);
+      }
+      form.append(key, req.body[key].toString());
+    });
+
+    const response = await fetch(
+      "https://breathtech-ai-models-hoting-production.up.railway.app/predict",
+      { method: "POST", body: form }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Prediction proxy error:", err);
+    res
+      .status(500)
+      .json({ message: "Prediction failed", error: err.toString() });
+  }
+});
+
+// New AI model (skin diagnosis)
+app.post("/api/skin-diagnose", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file)
+      return res.status(400).json({ error: "No image file uploaded" });
+
+    const form = new FormData();
+    form.append("file", req.file.buffer, {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
+
+    const response = await fetch(
+      "https://breathtech-ai-models-hoting-production.up.railway.app/diagnose",
+      { method: "POST", body: form }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Skin model proxy error:", err);
+    res
+      .status(500)
+      .json({ message: "Skin diagnosis failed", error: err.toString() });
+  }
+});
+// ======================================================
 // ===================== AI PROXIES =====================
 // (unchanged)
 // ======================================================
